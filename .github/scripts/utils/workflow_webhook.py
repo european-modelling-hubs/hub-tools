@@ -74,7 +74,7 @@ def run ():
     # debug only, to be removed
     jdata = json.loads(custom_json_data)
     jpayload = {}
-    jpayload["disease"] = disease
+    jpayload["disease"] = disease_name
     jpayload["commit"] = jdata
 
     print (f"### sending: \n{jpayload}\n")
