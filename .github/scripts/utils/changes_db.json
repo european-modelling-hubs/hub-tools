@@ -1,1 +1,10 @@
-{}
+{  
+    "Test1": [
+        {
+            "model": "SIRModel",
+            "changes": [
+                "model-output/Test1_SIRModel/2023-10-28-Test1_SIRModel.csv",
+                "model-output/Test1_SIRModel/2023-11-04-Test1_SIRModel.csv"
+            ]
+        }
+}
