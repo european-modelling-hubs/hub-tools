@@ -52,7 +52,7 @@ def run ():
     # get env parameters
     env_file = os.getenv('GITHUB_OUTPUT')
     
-    wh_url = os.getenv("webhook_url") + "forecasts/"
+    wh_url = os.getenv("webhook_url") + "forecast/"
     wh_secret = os.getenv("webhook_secret")
     custom_json_data = os.getenv("data")
     disease_name = os.getenv("disease_name")
