@@ -52,13 +52,15 @@ def run ():
     # get env parameters
     env_file = os.getenv('GITHUB_OUTPUT')
     
-    wh_url = os.getenv("webhook_url")
+    wh_url = os.getenv("webhook_url") + "forecasts/"
     wh_secret = os.getenv("webhook_secret")
     custom_json_data = os.getenv("data")
+    disease_name = os.getenv("disease_name")
     
     # debug only, to be removed
     print ("### Url: {}".format(wh_url))
     print ("### Secret: {}".format(wh_secret))
+    print ("### Disease: {}".format(disease_name))
     print ("### Data: {}".format(custom_json_data))
     
     
@@ -70,13 +72,19 @@ def run ():
     
     
     # debug only, to be removed
+    jdata = json.loads(custom_json_data)
+    jpayload = {}
+    jpayload["disease"] = disease
+    jpayload["commit"] = jdata
+
+    print (f"### sending: \n{jpayload}\n")
     
     
     if wh_url is None or wh_secret is None or custom_json_data is None:
       return False
     
     sender_obj = Sender (wh_url)
-    sender_obj.send(custom_json_data, wh_secret)
+    sender_obj.send(jpayload, wh_secret)
     
     return True
 
