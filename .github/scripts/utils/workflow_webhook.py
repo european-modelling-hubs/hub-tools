@@ -84,7 +84,7 @@ def run ():
       return False
     
     sender_obj = Sender (wh_url)
-    sender_obj.send(jpayload, wh_secret)
+    sender_obj.send(json.dumps(jpayload), wh_secret)
     
     return True
 
