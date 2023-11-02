@@ -50,45 +50,47 @@ class Sender () :
 def run ():
     
     # get env parameters
-    env_file = os.getenv('GITHUB_OUTPUT')
-    
-    wh_url = os.getenv("webhook_url") + "forecast/"
-    wh_secret = os.getenv("webhook_secret")
-    custom_json_data = os.getenv("data")
+    env_file = os.getenv('GITHUB_OUTPUT')    
+    json_data = os.getenv("data")
+    data_type = os.getenv("data_type")
     disease_name = os.getenv("disease_name")
+    wh_url = os.getenv("webhook_url") + ("forecast/" if data_type == 'forecast' else "model-metadata/" )
+    wh_secret = os.getenv("webhook_secret")
+
     
     # debug only, to be removed
     print ("### Url: {}".format(wh_url))
     print ("### Secret: {}".format(wh_secret))
     print ("### Disease: {}".format(disease_name))
-    print ("### Data: {}".format(custom_json_data))
+    print ("### Data: {}".format(json_data))
     
     
-    if isinstance(custom_json_data, dict):
+    if isinstance(json_data, dict):
         print ('### Data is a dictionary')
 
-    if isinstance(custom_json_data, str):
+    if isinstance(json_data, str):
         print ('### Data is a string')
     
     
     # debug only, to be removed
-    jdata = json.loads(custom_json_data)
+    jdata = json.loads(json_data)
     jpayload = {}
     jpayload["disease"] = disease_name
-    jpayload["forecasts"] = jdata
+    if data_type == 'forecast':
+        jpayload["forecasts"] = jdata
+    else:
+        jpayload["changes"] = jdata["changes"]
 
     print (f"### sending: \n{jpayload}\n")
     
     
-    if wh_url is None or wh_secret is None or custom_json_data is None:
+    if wh_url is None or wh_secret is None or json_data is None:
       return False
     
     sender_obj = Sender (wh_url)
     sender_obj.send(json.dumps(jpayload), wh_secret)
     
     return True
-
-
 
 
 if __name__ == "__main__":
