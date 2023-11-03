@@ -3,7 +3,6 @@
         {
             "model": "SIRModel",
             "changes": [
-                "model-output/Test1-SIRModel/2023-10-28-Test1-SIRModel.csv",
                 "model-output/Test1-SIRModel/2023-11-04-Test1-SIRModel.csv"
             ]
         }
