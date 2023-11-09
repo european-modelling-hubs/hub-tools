@@ -151,9 +151,11 @@ def store(to_store):
 
 
     if model_changes:
+        print (f"{len(model_changes)} changes in model-output")
         storeForecasts(model_changes)
 
     if metadata_changes:
+        print (f"{len(metadata_changes)} changes in model-metadata")
         storetMetaData(metadata_changes)
 
 
