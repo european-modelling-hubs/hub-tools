@@ -118,7 +118,7 @@ def updateMetadataJson (json_file_path, changes):
 ###
 def store(to_store):
 
-    
+    print(f"<<< Store {to_store} >>> ")
     # Make a list out of the changed files
     fchanges = to_store.split(" ")
 
