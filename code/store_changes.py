@@ -163,5 +163,6 @@ if __name__ == "__main__":
     print (f">>>>> changes: {store_data}")
 
     jchanges = json.load(store_data)
+    print (f"<<<<< jchanges: {jchanges}")
     
-    store(store_data["pr-changes"])
+    store(jchanges["pr-changes"])
