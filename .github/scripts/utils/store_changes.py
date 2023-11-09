@@ -63,10 +63,11 @@ def updateForecastsJson(json_file_path, changes):
             else:
                 j_model[0]["changes"] += set(entry["changes"]).difference (j_model[0]["changes"])
 
-    print(f"Saving json: \n{json_data}")
+    
 
     try:
         with open(json_file_path, 'w') as fdb:
+            print(f"Saving json: \n{json_data}")
             json.dump(json_data, fdb, indent=4)
     except:
         # If the file doesn't exist, handle error
@@ -103,6 +104,7 @@ def updateMetadataJson (json_file_path, changes):
     try:
         with open(json_file_path, 'w') as fdb:
             json.dump(json_data, fdb, indent=4)
+            print(f"Saving json: \n{json_data}")
     except:
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
