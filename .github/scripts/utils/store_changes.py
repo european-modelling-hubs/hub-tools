@@ -25,7 +25,7 @@ def storeForecasts (forecasts):
 
     if out_data['models']:
         print(f"Current path: {os.getcwd()}")
-        db_path = os.path.join(os.getcwd(), ".github", "data-storage", "changes_db.json")
+        db_path = os.path.join(os.getcwd(), "./", ".github", "data-storage", "changes_db.json")
         # db_path = db_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "changes_db.json")
         updateForecastsJson(db_path, out_data)
     
@@ -83,7 +83,7 @@ def updateForecastsJson(json_file_path, changes):
 
 def storetMetaData (metadata):
     print ("Storing meta-data")    
-    db_path = os.path.join(os.getcwd(), ".github", "data-storage", "metadata_db.json")
+    db_path = os.path.join(os.getcwd(), "./", ".github", "data-storage", "metadata_db.json")
     updateMetadataJson(db_path, metadata)
 
 
