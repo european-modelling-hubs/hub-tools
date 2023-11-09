@@ -160,5 +160,6 @@ def store(to_store):
 
 if __name__ == "__main__":
     store_data = os.getenv("data")        
+    jdata = json.loads(store_data)
     print (f">>>>> changes: {store_data}")
-    store(store_data["changes"])
+    store(store_data["pr-changes"])
