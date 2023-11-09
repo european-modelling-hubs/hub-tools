@@ -163,6 +163,6 @@ if __name__ == "__main__":
     j_cont = { "pippo": "pluto" }
     with open("test.json", 'w') as fdb:
         json.dump(j_cont, fdb)
-        print(f"Saving json: \n{json_data}")
+        
     
     store(store_data)
