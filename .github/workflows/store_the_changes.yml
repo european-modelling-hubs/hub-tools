@@ -1,0 +1,15 @@
+on:
+  workflow_call:
+    inputs:
+      the-changes:
+        required: true
+        type: string
+
+jobs:
+  print-changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print the input name to STDOUT
+        run: |
+          echo "The username is ${{ inputs.the-changes }}"
