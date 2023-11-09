@@ -24,7 +24,7 @@ def storeForecasts (forecasts):
             model_entry["changes"].append(forecast)
 
     if out_data['models']:
-        db_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "..", "..", ".github", "data-storage", "changes_db.json")
+        db_path = os.path.join("..", "..", "..", "..", ".github", "data-storage", "changes_db.json")
         # db_path = db_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "changes_db.json")
         updateForecastsJson(db_path, out_data)
     
