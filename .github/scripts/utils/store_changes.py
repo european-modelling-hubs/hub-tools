@@ -65,9 +65,14 @@ def updateForecastsJson(json_file_path, changes):
 
     print(f"Saving json: \n{json_data}")
 
-    with open(json_file_path, 'w') as fdb:
-        json.dump(json_data, fdb, indent=4)
-
+    try:
+        with open(json_file_path, 'w') as fdb:
+            json.dump(json_data, fdb, indent=4)
+    except:
+        # If the file doesn't exist, handle error
+        raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
+    
+    
     print(f"JOB DONE updateForecastsJson >>>>>>>>")
 
 
@@ -95,8 +100,12 @@ def updateMetadataJson (json_file_path, changes):
 
     json_data["changes"] = changes if "changes" not in json_data else  list(set(json_data["changes"] + changes))
 
-    with open(json_file_path, 'w') as fdb:
-        json.dump(json_data, fdb, indent=4)
+    try:
+        with open(json_file_path, 'w') as fdb:
+            json.dump(json_data, fdb, indent=4)
+    except:
+        # If the file doesn't exist, handle error
+        raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
 
     print(f"JOB DONE updateMetadataJson >>>>>>>>")
 
