@@ -160,8 +160,9 @@ def store(to_store):
 if __name__ == "__main__":
     # store_data = 'model-metadata/ISI-AutoArima.yml model-metadata/ISI-Test1.yml model-output/Test1-SIRModel/2023-11-04-Test1-SIRModel.csv model-output/Test1-SIRModel/2023-11-05-Test1-SIRModel.csv model-output/Test1-SIRModel/2023-11-06-Test1-SIRModel.csv'
     store_data = os.getenv("data")
-     with open("test.json", 'w') as fdb:
-            json.dump({ }, fdb, indent=4)
-            print(f"Saving json: \n{json_data}")
+    j_cont = { "pippo": "pluto" }
+    with open("test.json", 'w') as fdb:
+        json.dump(j_cont, fdb)
+        print(f"Saving json: \n{json_data}")
     
     store(store_data)
