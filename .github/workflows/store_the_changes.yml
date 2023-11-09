@@ -13,3 +13,14 @@ jobs:
       - name: Print the input name to STDOUT
         run: |
           echo "The username is ${{ inputs.the-changes }}"
+
+
+       # Store changes 
+       # -------------------------
+      - name: Store Changes 
+        env:
+          data: ${{ steps.pr_changes_reader.outputs.content }}
+        run: |
+          echo ">>> Store changes to json"
+          python ../scripts/utils/store_changes.py
+     
