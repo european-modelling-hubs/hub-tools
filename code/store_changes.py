@@ -81,14 +81,26 @@ def updateForecastsJson(json_file_path, changes):
 
 
 
-def storetMetaData (metadata):
-    print ("Storing meta-data")    
-    db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/metadata_db.json"
-    # db_path = os.path.join(os.getcwd(), "./", ".github", "data-storage", "metadata_db.json")
-    updateMetadataJson(db_path, metadata)
+# def storeMetaData (metadata):
+#     print ("Storing meta-data")    
+#     db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/metadata_db.json"
+#     # db_path = os.path.join(os.getcwd(), "./", ".github", "data-storage", "metadata_db.json")
+#     updateMetadataJson(db_path, metadata)
+
+# def storeTargetData (targetdata):
+#     print ("Storing target-data")    
+#     db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/target_db.json"
+#     updateJsonData(db_path, targetdata)
 
 
-def updateMetadataJson (json_file_path, changes):
+def storeStdData (data, db_file):
+    print ("Storing data")    
+    db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/" + db_file
+    updateJsonData(db_path, data)
+
+
+
+def updateJsonData (json_file_path, changes):
 
     json_data = None
 
@@ -96,13 +108,13 @@ def updateMetadataJson (json_file_path, changes):
     try:
         with open (json_file_path, 'r') as fdb:
             json_data = json.load(fdb)
-            print(f"JSON METADATA CONTENT: \n{json_data}")
+            print(f"JSON DB CONTENT: \n{json_data}")
             
     except FileNotFoundError:
         # If the file doesn't exist, handle error
         raise Exception(f"Json file not found {json_file_path}\n")
 
-    json_data["changes"] = changes if "changes" not in json_data else  list(set(json_data["changes"] + changes))
+    json_data["changes"] = changes if "changes" not in json_data else list(set(json_data["changes"] + changes))
 
     try:
         with open(json_file_path, 'w') as fdb:
@@ -112,7 +124,7 @@ def updateMetadataJson (json_file_path, changes):
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
 
-    print(f"JOB DONE updateMetadataJson >>>>>>>>")
+    print(f"JOB DONE updateDataJson >>>>>>>>")
 
 ###
 ###
@@ -129,6 +141,7 @@ def store(to_store):
 
     model_changes = []
     metadata_changes = []
+    targetdata_changes = []
     
     # 
     for fchanged in fchanges:
@@ -145,6 +158,9 @@ def store(to_store):
         elif rootFolder == "model-metadata":
             # save meta-data
             metadata_changes.append(fchanged)
+        elif rootFolder == "target-data":
+            # save target-data
+            targetdata_changes.append(fchanged)
         else :
             # unknown just discard
             print ('Unkown file submitted! Skip it')
@@ -156,7 +172,12 @@ def store(to_store):
 
     if metadata_changes:
         print (f"{len(metadata_changes)} changes in model-metadata")
-        storetMetaData(metadata_changes)
+        # storetMetaData(metadata_changes)
+        storeStdData(metadata_changes, "metadata_db.json")
+
+    if targetdata_changes:
+        print (f"{len(targetdata_changes)} changes in targetdata")
+        storeStdData(targetdata_changes, "target_db.json")
 
 
 
