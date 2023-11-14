@@ -25,9 +25,9 @@ def storeForecasts (forecasts):
 
     if out_data['models']:
         print(f"Current path: {os.getcwd()}")
-        print(f"RealDirName: {os.path.dirname(os.path.realpath(__file__))}")
-        # db_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "changes_db.json")
-        db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/changes_db.json"
+        db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
+        print(f"DB path: {db_path}")
+        # db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/changes_db.json"
         updateForecastsJson(db_path, out_data)
     
 
@@ -95,8 +95,10 @@ def updateForecastsJson(json_file_path, changes):
 
 
 def storeStdData (data, db_file):
-    print ("Storing data")    
-    db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/" + db_file
+    print ("Storing data")
+    db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/", db_file)
+    print(f"DB path: {db_path}")
+    # db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/" + db_file
     updateJsonData(db_path, data)
 
 
