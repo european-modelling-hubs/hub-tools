@@ -36,6 +36,9 @@ def run(storage_type, not_ingested):
     print ("Running run")
     db_path = None
 
+    jNI = os.getenv("not_ingested")
+    print (f"NI from env: {jNI}")
+
     if storage_type == "model-output":
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
     
