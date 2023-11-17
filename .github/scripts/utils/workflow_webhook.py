@@ -139,10 +139,20 @@ def run ():
     wh_url = os.getenv("webhook_url") + ("forecast/" if data_type == 'forecast' else "model-metadata/" )
     wh_secret = os.getenv("webhook_secret")
         
-    
-    # debug only, to be removed
     jdata = json.loads(json_data)
+    
+    if wh_url is None or wh_secret is None or not jdata:
+        print(f"invalid request. Skip")
+            
+        run_results = {}
+        run_results["status"] = "invalid"
         
+        with open(env_file, "a") as outenv:
+            outenv.write (f"run_results={json.dumps(run_results)}")
+    
+        return
+        
+    
     jpayload = {}
     jpayload["disease"] = disease_name
     
@@ -154,8 +164,7 @@ def run ():
     print (f"### sending: \n{jpayload}\n")
     
     
-    if wh_url is None or wh_secret is None or json_data is None:
-      return False
+    
     
     sender_obj = Sender (wh_url)
     response = sender_obj.send(json.dumps(jpayload), wh_secret)
