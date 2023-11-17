@@ -43,9 +43,6 @@ class Sender () :
     # send POST request 
     r = requests.post(self.webhook_url, data=payload, auth=BodyDigestSignature(secret))
 
-    print (f"Sender - Response code: {r}")
-    print (f"Sender - Response Json: \n {r.json()}")
-
     return r
 
 
