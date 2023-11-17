@@ -59,8 +59,6 @@ def run(storage_type, not_ingested):
 if __name__ == "__main__":
 
     wout = os.getenv("not_ingested")
-    print (f"NI from env: {wout}")
-
     jdata = json.loads(wout)
 
     not_ingested = []
