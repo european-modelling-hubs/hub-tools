@@ -111,6 +111,13 @@ def handleResponseError(http_code, j_response):
 def handleResponse (response):
 
     http_code = response.status_code
+
+    if response.headers["content-type"].strip().startswith("application/json"):
+        print("Is json response")
+    else:
+        print("Is NOT json response")
+        
+    
     j_response = response.json()
 
     print (f"Response http code: {http_code}")
