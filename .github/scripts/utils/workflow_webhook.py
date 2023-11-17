@@ -61,6 +61,14 @@ def handleResponseOk(j_response):
 
     return res
 
+def handleServerError():
+    res = {}
+    res["status"] = "error"
+    res["message"] = "Server Error"
+    res["failed_ingestions"] = "NA"
+    
+    return res
+
 
 def handleResponseError(http_code, j_response):
     print ("Handling error response")
@@ -112,27 +120,12 @@ def handleResponse (response):
 
     http_code = response.status_code
 
-    if response.headers["content-type"].strip().startswith("application/json"):
-        print("Is json response")
+    if not response.headers["content-type"].strip().startswith("application/json"):
+        return handleServerError()
+    elif http_code == 200:
+        return handleResponseOk(response.json())
     else:
-        print("Is NOT json response")
-        print(f"CONTENT \n: {response.content}")
-        print(f"Text \n: {response.text}")
-
-        
-    
-    j_response = response.json()
-
-    print (f"Response http code: {http_code}")
-
-    if http_code == 200:
-       handleResponseOk(j_response)
-    else:
-       handleResponseError(http_code, j_response)
-
-
-   
-   
+        return handleResponseError(http_code, response.json())
 
 
 #
