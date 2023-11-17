@@ -26,6 +26,7 @@ def clearData(db_path, not_ingested):
     emptyDb(db_path)
 
     if not_ingested:
+        print ("Not ingested files present - store changes")
         stc.store(not_ingested)
 
 
