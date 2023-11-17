@@ -117,6 +117,7 @@ def handleResponse (response):
     else:
         print("Is NOT json response")
         print(f"CONTENT \n: {response.content}")
+        print(f"Text \n: {response.text}")
 
         
     
