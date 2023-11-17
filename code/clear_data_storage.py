@@ -57,10 +57,12 @@ if __name__ == "__main__":
     wout = os.getenv("not_ingested")
     print (f"NI from env: {wout}")
 
+    jdata = json.loads(wout)
+
     not_ingested = []
 
-    if wout.get('failed_ingestions') != None:
-        not_ingested = wout['failed_ingestions']
+    if jdata.get('failed_ingestions') != None:
+        not_ingested = jdata['failed_ingestions']
         
     
     parser = argparse.ArgumentParser()
