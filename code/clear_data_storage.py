@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     not_ingested = []
 
-    if jresponse.get('failed_ingestions') != None && jresponse.get('failed_ingestions') != "NA":
+    if jresponse.get('failed_ingestions') != None and jresponse.get('failed_ingestions') != "NA":
         not_ingested = jresponse['failed_ingestions']
         
     
