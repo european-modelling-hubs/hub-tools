@@ -114,6 +114,8 @@ def handleResponse (response):
 
     if response.headers["content-type"].strip().startswith("application/json"):
         print("Is json response")
+
+        print(f"CONTENT \n: {response.content}")
     else:
         print("Is NOT json response")
         
