@@ -23,12 +23,13 @@ def emptyDb(db_path):
 
 def clearData(db_path, not_ingested):
     print (f"Clearing db {db_path}")
+    
     emptyDb(db_path)
 
     if not_ingested:
         print ("Not ingested files present - store changes")
         print (f"Not ingested list: {not_ingested}")
-        nis = ' '.join(f'"{w}"' for w in not_ingested)
+        nis = ' '.join(not_ingested)
         print (f"input for store: {nis}")
         stc.store(nis)
 
