@@ -8,11 +8,13 @@ import store_changes as stc
 
 def emptyDb(db_path):
     empty_json = dict() 
-    #emtpy_json_s = json.dumps(empty_json)
+
+    print ("Emptying db")
 
     try:
         with open(db_path, 'w') as fdb:
             json.dump(empty_json, fdb, indent=4)
+            print ("Emptying db - done")
     except:
         # If the file doesn't exist, handle error
         raise Exception(f"Error emptying json file: {db_path}\n")
@@ -20,8 +22,7 @@ def emptyDb(db_path):
 
 
 def clearData(db_path, not_ingested):
-    print ("Clearing model ouput")
-    db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
+    print (f"Clearing db {db_path}")
     emptyDb(db_path)
 
     if not_ingested:
