@@ -58,13 +58,13 @@ def run(storage_type, not_ingested):
 
 if __name__ == "__main__":
 
-    wout = os.getenv("not_ingested")
-    jdata = json.loads(wout)
+    wh_resp = os.getenv("wh_response")
+    jresponse = json.loads(wh_resp)
 
     not_ingested = []
 
-    if jdata.get('failed_ingestions') != None:
-        not_ingested = jdata['failed_ingestions']
+    if jresponse.get('failed_ingestions') != None:
+        not_ingested = jresponse['failed_ingestions']
         
     
     parser = argparse.ArgumentParser()
