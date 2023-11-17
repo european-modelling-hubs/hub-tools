@@ -34,10 +34,7 @@ def clearData(db_path, not_ingested):
 
 def run(storage_type, not_ingested):
     print ("Running run")
-    db_path = None
-
-    jNI = os.getenv("not_ingested")
-    print (f"NI from env: {jNI}")
+    db_path = None   
 
     if storage_type == "model-output":
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
@@ -57,13 +54,19 @@ def run(storage_type, not_ingested):
 
 if __name__ == "__main__":
 
+    wout = os.getenv("not_ingested")
+    print (f"NI from env: {wout}")
+
+    not_ingested = []
+
+    if wout.get('failed_ingestions') != None:
+        not_ingested = wout['failed_ingestions']
+        
+    
     parser = argparse.ArgumentParser()
     parser.add_argument('--storage_type')
-    parser.add_argument('--not_ingested', default=[])
 
     args = parser.parse_args()
-    
     print (f"storage: {args.storage_type}")
-    print (f"not ingested: {args.not_ingested}")
 
-    run(args.storage_type, args.not_ingested)
+    run(args.storage_type, not_ingested)
