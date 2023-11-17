@@ -54,12 +54,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--storage_type')
-    parser.add_argument('--not_ingested')
+    parser.add_argument('--not_ingested', default=[])
 
     args = parser.parse_args()
-    pippo = args.storage_type
-
+    
     print (f"storage: {args.storage_type}")
     print (f"not ingested: {args.not_ingested}")
 
-    run()
+    run(args.storage_type, args.not_ingested)
