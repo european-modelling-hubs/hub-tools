@@ -24,10 +24,9 @@ def storeForecasts (forecasts):
             model_entry["changes"].append(forecast)
 
     if out_data['models']:
-        print(f"Current path: {os.getcwd()}")
+        # "/home/runner/work/the-hub/the-hub/./repo/.github/data-storage/changes_db.json"
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
         print(f"DB path: {db_path}")
-        # db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/changes_db.json"
         updateForecastsJson(db_path, out_data)
     
 
@@ -41,9 +40,7 @@ def updateForecastsJson(json_file_path, changes):
     # Step 1: Read the existing data from the JSON file
     try:
         with open (json_file_path, 'r') as fdb:
-            json_data = json.load(fdb)
-            print(f"JSON FORECASTS CONTENT: \n{json_data}")
-            
+            json_data = json.load(fdb)            
     except FileNotFoundError:
         # If the file doesn't exist, handle error
         raise Exception(f"Json file not found {json_file_path}\n")
@@ -62,45 +59,23 @@ def updateForecastsJson(json_file_path, changes):
             j_model = [j_record for j_record in j_records if j_record.get("model") == entry.get("model")]
             if j_model == [] :
                 j_records.append(entry)
-                print("Add new team to the backup")
             else:
                 j_model[0]["changes"] += set(entry["changes"]).difference (j_model[0]["changes"])
 
-    
-
     try:
         with open(json_file_path, 'w') as fdb:
-            print(f"Saving json: \n{json_data}")
             json.dump(json_data, fdb, indent=4)
     except:
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
-    
-    
-    print(f"JOB DONE updateForecastsJson >>>>>>>>")
-
-
-
-
-# def storeMetaData (metadata):
-#     print ("Storing meta-data")    
-#     db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/metadata_db.json"
-#     # db_path = os.path.join(os.getcwd(), "./", ".github", "data-storage", "metadata_db.json")
-#     updateMetadataJson(db_path, metadata)
-
-# def storeTargetData (targetdata):
-#     print ("Storing target-data")    
-#     db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/target_db.json"
-#     updateJsonData(db_path, targetdata)
-
+        
 
 def storeStdData (data, db_file):
     print ("Storing data")
+    #"/home/runner/work/the-hub/the-hub/./repo/.github/data-storage/" + db_file
     db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/", db_file)
     print(f"DB path: {db_path}")
-    # db_path = "/home/runner/work/flu-forecast-hub/flu-forecast-hub/./repo/.github/data-storage/" + db_file
     updateJsonData(db_path, data)
-
 
 
 def updateJsonData (json_file_path, changes):
@@ -122,18 +97,13 @@ def updateJsonData (json_file_path, changes):
     try:
         with open(json_file_path, 'w') as fdb:
             json.dump(json_data, fdb, indent=4)
-            print(f"Saving json: \n{json_data}")
     except:
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
 
-    print(f"JOB DONE updateDataJson >>>>>>>>")
 
-###
-###
 def store(to_store):
 
-    print(f"<<< Store {to_store} >>> ")
     # Make a list out of the changed files
     fchanges = to_store.split(" ")
 

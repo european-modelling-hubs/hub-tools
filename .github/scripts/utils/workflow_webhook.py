@@ -40,10 +40,92 @@ class Sender () :
 
 
   def send (self, payload, secret):
+    # send POST request 
     r = requests.post(self.webhook_url, data=payload, auth=BodyDigestSignature(secret))
-    print ("Response: {}".format(r))
-    # print(f"Status Code: {r.status_code}, Response: {r.json()}")
 
+    print (f"Sender - Response code: {r}")
+    print (f"Sender - Response Json: \n {r.json()}")
+
+    return r
+
+
+
+def handleResponseOk(j_response):
+    print ("Handling successful response")
+    # JsonResponse({'status': 'success', 'message': 'Import completed'}, status=http.client.OK)
+
+    for key in j_response:
+      print (f"Key {key} -> data: {j_response[key]}")
+
+    res = {}
+    res["status"] = 'success'
+    res["message"] = j_response["message"]
+    res["failed_ingestions"] = "NA"
+
+    return res
+
+
+def handleResponseError(http_code, j_response):
+    print ("Handling error response")
+
+    res = {}
+    res["status"] = j_response["status"]
+    res["message"] = j_response["message"]
+    
+    
+
+
+    if http_code == 400:    
+        # Bad request
+        #'status': 'error', 'message': 'Invalid input JSON'
+        print ("Bad request")
+        res["failed_ingestions"] = "NA"
+
+
+    elif http_code == 401:
+        # Unauthorized
+        #'status': 'error', 'message': 'Signature authentication failed'
+        print("Unauthorised")
+        res["failed_ingestions"] = "NA"
+       
+
+
+    elif http_code == 500:
+
+        print("Internal Server Error")
+        res["failed_ingestions"] = "NA" if j_response["status"] == "error" else j_response["failed_ingestions"]
+
+    else:
+       print("Unknown Error")
+       res["status"] = "error"
+       res["message"] = "Unknown Error occured"
+       res["failed_ingestions"] = "NA"
+
+
+
+
+    for key in j_response:
+        print (f"Key {key} -> data: {j_response[key]}")
+
+    return res
+
+
+
+def handleResponse (response):
+
+    http_code = response.status_code
+    j_response = response.json()
+
+    print (f"Response http code: {http_code}")
+
+    if http_code == 200:
+       handleResponseOk(j_response)
+    else:
+       handleResponseError(http_code, j_response)
+
+
+   
+   
 
 
 #
@@ -56,26 +138,14 @@ def run ():
     disease_name = os.getenv("disease_name")
     wh_url = os.getenv("webhook_url") + ("forecast/" if data_type == 'forecast' else "model-metadata/" )
     wh_secret = os.getenv("webhook_secret")
-
-    
-    # debug only, to be removed
-    print ("### Url: {}".format(wh_url))
-    print ("### Secret: {}".format(wh_secret))
-    print ("### Disease: {}".format(disease_name))
-    print ("### Data: {}".format(json_data))
-    
-    
-    if isinstance(json_data, dict):
-        print ('### Data is a dictionary')
-
-    if isinstance(json_data, str):
-        print ('### Data is a string')
-    
+        
     
     # debug only, to be removed
     jdata = json.loads(json_data)
+        
     jpayload = {}
     jpayload["disease"] = disease_name
+    
     if data_type == 'forecast':
         jpayload["forecasts"] = jdata
     else:
@@ -88,17 +158,17 @@ def run ():
       return False
     
     sender_obj = Sender (wh_url)
-    sender_obj.send(json.dumps(jpayload), wh_secret)
-    
-    return True
+    response = sender_obj.send(json.dumps(jpayload), wh_secret)
+
+    run_results = handleResponse(response)
+
+
+    with open(env_file, "a") as outenv:
+        print(f"Writing to out: validate: {run_results}")
+        outenv.write (f"run_results={json.dumps(run_results)}")
 
 
 if __name__ == "__main__":
     print ("### Testing WebHook tool script")
+    run()
 
-    passed = run()
-
-    if passed : 
-        print ("### >>>>>>>>>> SENT")
-    else:
-        print ('### >>>>>>>>>> INVALID')
