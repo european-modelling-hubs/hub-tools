@@ -54,7 +54,7 @@ for row in csv_reader:
 out_files_ILI = [of.format(report_date=snapshot_date) for of in out_files_ILI]
 out_files_ARI = [of.format(report_date=snapshot_date) for of in out_files_ARI]
 
-​
+
 for output_path in out_files_ILI:
     with open('./repo/' + output_path, 'w') as output_file:
         csv_writer = csv.writer(output_file)
