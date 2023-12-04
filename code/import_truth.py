@@ -57,12 +57,12 @@ out_files_ARI = [of.format(report_date=snapshot_date) for of in out_files_ARI]
 
 ​
 for output_path in out_files_ILI:
-    with open(output_path, 'w') as output_file:
+    with open('./repo/' + output_path, 'w') as output_file:
         csv_writer = csv.writer(output_file)
         csv_writer.writerows(ILI_records)    
 ​
 for output_path in out_files_ARI:
-    with open(output_path, 'w') as output_file:
+    with open('./repo/' + output_path, 'w') as output_file:
         csv_writer = csv.writer(output_file)
         csv_writer.writerows(ARI_records)
 
