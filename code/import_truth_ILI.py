@@ -9,7 +9,7 @@ import pycountry
 # Config
 
 url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_ILIARIRates.csv'
-out_files_ILI = ['target-data/ERVISS/latest-ILI_incidence.csv', 'target-data/ERVISS/snapshot/{report_date}-ILI_incidence.csv']
+out_files_ILI = ['target-data/ERVISS/latest-ILI_incidence.csv', 'target-data/ERVISS/snapshots/{report_date}-ILI_incidence.csv']
 
 
 # Build URL
