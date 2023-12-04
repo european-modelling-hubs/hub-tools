@@ -1,3 +1,4 @@
+import os
 import sys
 import csv
 from urllib.request import urlopen
@@ -9,7 +10,7 @@ import pycountry
 # Config
 
 url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_ILIARIRates.csv'
-out_files_ARI = ['target-data/ERVISS/latest-ARI_incidence.csv', 'target-data/ERVISS/snapshot/{report_date}-ARI_incidence.csv']
+out_files_ARI = ['target-data/ERVISS/latest-ARI_incidence.csv', 'target-data/ERVISS/snapshots/{report_date}-ARI_incidence.csv']
 
 
 # Build URL
