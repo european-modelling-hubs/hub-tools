@@ -3,7 +3,6 @@ import csv
 from urllib.request import urlopen
 from datetime import datetime, timedelta
 from isoweek import Week
-​
 import pycountry
 ​
 # Config
