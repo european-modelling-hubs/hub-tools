@@ -119,19 +119,14 @@ def store(to_store):
     # 
     for fchanged in fchanges:
                 
-        # get type from path
-        path_split = os.path.split(fchanged)
-        dirname = os.path.dirname(path_split[0])
-
         # needed for different deepness of paths
-        rootFolder = dirname if dirname != '' else path_split[0]
-        if rootFolder == "model-output":
+        if fchanged.startswith("model-output"):
             # save model output
             model_changes.append(fchanged)
-        elif rootFolder == "model-metadata":
+        elif fchanged.startswith("model-metadata"):
             # save meta-data
             metadata_changes.append(fchanged)
-        elif rootFolder == "target-data":
+        elif fchanged.startswith("target-data"):
             # save target-data
             targetdata_changes.append(fchanged)
         else :
