@@ -32,7 +32,7 @@ def updateTargetJson (json_file_path, out_data):
         raise Exception(f"Json file not found {json_file_path}\n")
     
 
-    json_data[target] = out_data['changes'] if target not in json_data else list(set(json_data[target]['changes'] + out_data['changes']))
+    json_data[target]['changes'] = out_data['changes'] if target not in json_data else list(set(json_data[target]['changes'] + out_data['changes']))
 
     try:
         with open(json_file_path, 'w') as fdb:
