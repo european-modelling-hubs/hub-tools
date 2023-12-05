@@ -5,7 +5,8 @@ import json
 
 def storeTargetData (target_data):
     # get the target name from path 
-    target_name = os.path.basename(os.path.dirname(target_data[0]))
+    
+    target_name = os.path.normpath(target_data[0]).split(os.sep)[1]
 
     out_data = {}    
     out_data['target'] = target_name
