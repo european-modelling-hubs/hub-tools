@@ -2,6 +2,45 @@ import os
 import json
 
 
+
+def storeTargetData (target_data):
+    # get the target name from path 
+    target_name = os.path.basename(os.path.dirname(target_data[0]))
+
+    out_data = {}    
+    out_data['target'] = target_name
+    out_data['changes'] = target_data
+        
+    if out_data["changes"]:
+        db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/target_db.json")
+        print(f"DB path: {db_path}")
+        updateTargetJson(db_path, out_data)
+
+
+def updateTargetJson (json_file_path, out_data):
+
+    json_data = None
+    target = out_data.get("target")
+    
+    # Step 1: Read the existing data from the JSON file
+    try:
+        with open (json_file_path, 'r') as fdb:
+            json_data = json.load(fdb)            
+    except FileNotFoundError:
+        # If the file doesn't exist, handle error
+        raise Exception(f"Json file not found {json_file_path}\n")
+    
+
+    json_data[target] = out_data['changes'] if target not in json_data else list(set(json_data[target]['changes'] + out_data['changes']))
+
+    try:
+        with open(json_file_path, 'w') as fdb:
+            json.dump(json_data, fdb, indent=4)
+    except:
+        # If the file doesn't exist, handle error
+        raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")    
+
+
 def storeForecasts (forecasts):
 
     team = os.path.basename(os.path.split(forecasts[0])[0]).split('-')[0]
@@ -23,8 +62,7 @@ def storeForecasts (forecasts):
         else:
             model_entry["changes"].append(forecast)
 
-    if out_data['models']:
-        # "/home/runner/work/the-hub/the-hub/./repo/.github/data-storage/changes_db.json"
+    if out_data['models']:        
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
         print(f"DB path: {db_path}")
         updateForecastsJson(db_path, out_data)
@@ -140,12 +178,11 @@ def store(to_store):
 
     if metadata_changes:
         print (f"{len(metadata_changes)} changes in model-metadata")
-        # storetMetaData(metadata_changes)
         storeStdData(metadata_changes, "metadata_db.json")
 
     if targetdata_changes:
         print (f"{len(targetdata_changes)} changes in targetdata")
-        storeStdData(targetdata_changes, "target_db.json")
+        storeTargetData(targetdata_changes)
 
 
 
