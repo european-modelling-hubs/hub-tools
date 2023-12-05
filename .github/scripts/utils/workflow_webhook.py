@@ -136,7 +136,7 @@ def run ():
     json_data = os.getenv("data")
     data_type = os.getenv("data_type")
     disease_name = os.getenv("disease_name")
-    wh_url = os.getenv("webhook_url") + ("forecast/" if data_type == 'forecast' else "model-metadata/" )
+    wh_url = os.getenv("webhook_url")
     wh_secret = os.getenv("webhook_secret")
         
     jdata = json.loads(json_data)
@@ -158,8 +158,13 @@ def run ():
     
     if data_type == 'forecast':
         jpayload["forecasts"] = jdata
+        wh_url = wh_url + "forecast/"
+    elif data_type == 'target':
+        jpayload['targets'] = jdata
+        wh_url = wh_url + "truth/"        
     else:
         jpayload["changes"] = jdata["changes"]
+        wh_url = wh_url + "model-metadata/"
 
     print (f"### sending: \n{jpayload}\n")
     
