@@ -32,7 +32,7 @@ def updateTargetJson (json_file_path, out_data):
         raise Exception(f"Json file not found {json_file_path}\n")
 
     if target not in json_data:
-        json_data[target].append({'changes': out_data['changes']})
+        json_data[target] = {'changes': out_data['changes']}
     else:
         json_data[target]['changes'] = list(set(json_data[target]['changes'] + out_data['changes']))
     
