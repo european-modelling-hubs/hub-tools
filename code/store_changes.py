@@ -6,7 +6,7 @@ import json
 def storeTargetData (target_data):
     # get the target name from path 
     
-    target_name = os.path.splitext(os.path.basename(to_test))[0].split('-')[-1]
+    target_name = os.path.splitext(os.path.basename(target_data[0]))[0].split('-')[-1]
 
     out_data = {}    
     out_data['target'] = target_name
