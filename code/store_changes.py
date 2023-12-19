@@ -9,7 +9,7 @@ def storeTargetData (target_data):
     target_name = os.path.splitext(os.path.basename(target_data[0]))[0].split('-')[-1]
 
     out_data = {}    
-    out_data['target'] = target_name
+    out_data['target'] = target_name.replace("_", " ") 
     out_data['changes'] = target_data
         
     if out_data["changes"]:
