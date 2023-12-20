@@ -44,7 +44,7 @@ def updateTargetJson (json_file_path, out_data):
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")    
 
 
-def storeForecasts (forecasts):
+def storeForecasts (forecasts, isEnsemble = False):
 
     team = os.path.basename(os.path.split(forecasts[0])[0]).split('-')[0]
     if not team:
@@ -66,7 +66,7 @@ def storeForecasts (forecasts):
             model_entry["changes"].append(forecast)
 
     if out_data['models']:        
-        db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
+        db_path = os.path.join(os.getcwd(), "repo/.github/data-storage" + os.path.sep + ("ensemble_db.json" if isEnsemble else "changes_db.json"))
         print(f"DB path: {db_path}")
         updateForecastsJson(db_path, out_data)
     
@@ -154,6 +154,7 @@ def store(to_store):
     
 
     model_changes = []
+    ensemble_changes = []
     metadata_changes = []
     targetdata_changes = []
     
@@ -161,6 +162,9 @@ def store(to_store):
     for fchanged in fchanges:
                 
         # needed for different deepness of paths
+         if fchanged.startswith("model-output" + os.path.sep + "respicast-hubEnsemble"  + os.path.sep) or fchanged.startswith("model-output" + os.path.sep + "respicast-quantileBaseline"  + os.path.sep):
+            # add to ensemble
+            ensemble_changes.append(fchanged)
         if fchanged.startswith("model-output"):
             # save model output
             model_changes.append(fchanged)
@@ -179,6 +183,10 @@ def store(to_store):
         print (f"{len(model_changes)} changes in model-output")
         storeForecasts(model_changes)
 
+    if ensemble_changes:
+        print (f"{len(ensemble_changes)} changes in hub ensemble")
+        storeForecasts(ensemble_changes, isEnsemble = True)
+    
     if metadata_changes:
         print (f"{len(metadata_changes)} changes in model-metadata")
         storeStdData(metadata_changes, "metadata_db.json")
