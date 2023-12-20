@@ -13,8 +13,7 @@ class BodyDigestSignature(object):
         self.secret = secret
         self.header = header
         self.algorithm = algorithm
-        print("Calling constructor - Secret: {}".format(secret))
-
+        
     def __call__(self, request):
         print("Calling call")
         body = request.body
@@ -26,9 +25,7 @@ class BodyDigestSignature(object):
 
         signature = hmac.new(self.secret.encode('utf-8'), body, digestmod=self.algorithm)
         hex_sig = signature.hexdigest()
-        print (f"GEN SIG {hex_sig}")
         request.headers[self.header] = hex_sig
-        #request.headers[self.header] = signature.hexdigest()
         return request
 
 
@@ -138,6 +135,8 @@ def run ():
     disease_name = os.getenv("disease_name")
     wh_url = os.getenv("webhook_url")
     wh_secret = os.getenv("webhook_secret")
+
+    print (f'>>>> DEBUG <<<<< Data: {json_data}, \nDisease: {disease_name}')
         
     jdata = json.loads(json_data)
     
