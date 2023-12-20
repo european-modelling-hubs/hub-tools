@@ -42,7 +42,10 @@ def run(storage_type, not_ingested):
 
     if storage_type == "model-output":
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/changes_db.json")
-    
+        
+    elif storage_type == "ensemble":
+        db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/ensemble_db.json")
+
     elif storage_type == "model-metadata":
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/metadata_db.json")
         
