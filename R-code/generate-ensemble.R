@@ -33,6 +33,12 @@ model_outputs <- model_outputs[model_outputs$model_id %in% models, ]
 # select only rows related to most recent forecast
 max_origin_date = max(model_outputs$origin_date)
 model_outputs <- model_outputs[model_outputs$origin_date == max_origin_date, ]
+
+# exclude models with extreme values
+model_outputs <- model_outputs %>%
+  group_by(model_id) %>%
+  filter(all(value <= 30000))
+
 # generate ensemble
 ens <- simple_ensemble(model_outputs,
                        agg_fun = opt$agg_fun,
