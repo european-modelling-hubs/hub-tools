@@ -134,7 +134,9 @@ def run ():
     json_data = os.getenv("data")
     data_type = os.getenv("data_type")
     disease_name = os.getenv("disease_name")
-    wh_url = os.getenv("webhook_url")
+    # wh_url = os.getenv("webhook_url")
+    wh_url = 'https://respicast.ecdc.europa.eu/import/truth/'
+    
     wh_secret = os.getenv("webhook_secret")
 
     print (f'>>>> DEBUG <<<<< Data: {json_data}, \nDisease: {disease_name}')
