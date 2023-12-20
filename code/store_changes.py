@@ -162,10 +162,10 @@ def store(to_store):
     for fchanged in fchanges:
                 
         # needed for different deepness of paths
-         if fchanged.startswith("model-output" + os.path.sep + "respicast-hubEnsemble"  + os.path.sep) or fchanged.startswith("model-output" + os.path.sep + "respicast-quantileBaseline"  + os.path.sep):
+        if fchanged.startswith("model-output" + os.path.sep + "respicast-hubEnsemble"  + os.path.sep) or fchanged.startswith("model-output" + os.path.sep + "respicast-quantileBaseline"  + os.path.sep):
             # add to ensemble
             ensemble_changes.append(fchanged)
-        if fchanged.startswith("model-output"):
+        elif fchanged.startswith("model-output"):
             # save model output
             model_changes.append(fchanged)
         elif fchanged.startswith("model-metadata"):
