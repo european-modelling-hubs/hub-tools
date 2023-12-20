@@ -167,7 +167,7 @@ def store(to_store):
         elif fchanged.startswith("model-metadata"):
             # save meta-data
             metadata_changes.append(fchanged)
-        elif fchanged.startswith("target-data"):
+        elif fchanged.startswith("target-data") and not 'latest-' in fchanged:
             # save target-data
             targetdata_changes.append(fchanged)
         else :
