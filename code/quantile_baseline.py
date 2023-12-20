@@ -179,3 +179,7 @@ quantile_baseline_forecasts = generate_baseline_forecast_fullpipeline(target_dat
 model_id = f"{str(args.team_abbr)}-{str(args.model_abbr)}"
 file_name = f"{origin_date.strftime('%Y-%m-%d')}-{model_id}.csv"
 quantile_baseline_forecasts.to_csv(os.path.join(args.hub_path, f"model-output/{model_id}/{file_name}"), index=False)
+
+env_file = os.getenv('GITHUB_OUTPUT')
+with open(env_file, "a") as outenv:
+   outenv.write (f"baseline_file=model-output/{model_id}/{file_name}")
