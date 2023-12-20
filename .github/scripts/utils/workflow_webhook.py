@@ -34,6 +34,7 @@ class Sender () :
   def __init__(self, webhook_url):
     
     self.webhook_url = webhook_url
+    print (f'sending data to {self.webhook_url}')
 
 
   def send (self, payload, secret):
