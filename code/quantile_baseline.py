@@ -168,7 +168,7 @@ def generate_baseline_forecast_fullpipeline(truth_data,
 
 # import target data 
 origin_date = get_next_day(date.today(), int(args.submission_end_weekday))
-target_data = pd.read_csv(os.path.join(args.hub_path, f"target-data/ERVISS/{args.filename}_latest.csv"))
+target_data = pd.read_csv(os.path.join(args.hub_path, f"target-data/ERVISS/latest-{args.filename}.csv"))
 quantile_baseline_forecasts = generate_baseline_forecast_fullpipeline(target_data, 
                                                                       target_name=str(args.target_name), 
                                                                       nsamples=int(args.nsamples),
