@@ -1,9 +1,11 @@
 import pandas as pd 
 import numpy as np 
 import os 
-from datetime import timedelta
+from datetime import timedelta, datetime
 import argparse
-from datetime import date
+
+# list of ground truth data sources
+data_sources = ["ERVISS", "FluID"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hub_path')
@@ -18,9 +20,12 @@ parser.add_argument('--submission_end_weekday', default=2)
 
 args = parser.parse_args()
 
-def get_next_day(test_date, weekday_idx): 
-    return test_date + timedelta(days=(weekday_idx - test_date.weekday() + 7) % 7)
- 
+
+def import_forecasting_weeks(path): 
+    forecasting_weeks = pd.read_csv(f"./{path}/supporting-files/forecasting_weeks.csv")
+    forecasting_weeks.loc[forecasting_weeks.is_latest == True]
+    return forecasting_weeks
+    
 
 def quantile_baseline(data : np.ndarray, 
                       nsamples : int, 
@@ -140,22 +145,34 @@ def format_data(df_quantile,
 
 
 def generate_baseline_forecast_fullpipeline(truth_data, 
-                                            origin_date,
+                                            forecasting_weeks,
                                             target_name="ILI incidence", 
                                             nsamples=10000,
                                             horizon=4,
                                             symmetrize=True): 
     
-    # get last date
-    last_date = truth_data.truth_date.max()
+    # get last truth date
+    last_date = datetime.strptime(forecasting_weeks.target_end_date.min(), "%Y-%m-%d") - timedelta(days=7)
+    
+    # import forecasting weeks 
+    origin_date = forecasting_weeks.origin_date.values[0]
+
     quantile_baseline_forecasts = pd.DataFrame()
 
     for location in truth_data.location.unique(): 
         truth_data_loc = truth_data.loc[truth_data.location == location]
+        # sort data
+        truth_data_loc = truth_data_loc.sort_values(by="truth_date", ascending=True, ignore_index=True)
+
+        # compute extra steps if truth data is missing
+        extra_horizon = int((last_date - datetime.strptime(truth_data_loc.truth_date.max(), "%Y-%m-%d")).days / 7)
         
         # generate baseline forecast samples
-        samples = quantile_baseline(data=truth_data_loc.value.values, nsamples=nsamples, horizon=horizon, symmetrize=symmetrize, include_training=False)
+        samples = quantile_baseline(data=truth_data_loc.value.values, nsamples=nsamples, horizon=horizon + extra_horizon, symmetrize=symmetrize, include_training=False)
 
+        # remove extra horizons data
+        samples = samples[:, -horizon:]
+        
         # generate quantiles
         df_quantile = compute_quantiles(samples)
 
@@ -164,20 +181,30 @@ def generate_baseline_forecast_fullpipeline(truth_data,
         
         quantile_baseline_forecasts = pd.concat((quantile_baseline_forecasts, df_quantile_formatted))
         
-    return quantile_baseline_forecasts
+    return quantile_baseline_forecasts, origin_date
 
-# import target data 
-origin_date = get_next_day(date.today(), int(args.submission_end_weekday))
-target_data = pd.read_csv(os.path.join(args.hub_path, f"target-data/ERVISS/latest-{args.filename}.csv"))
+
+# import forecasting weeks
+forecasting_weeks = import_forecasting_weeks(args.hub_path)
+
+# import target data from all sources
+target_data = pd.DataFrame()
+for source in data_sources:
+    target_source = pd.read_csv(os.path.join(args.hub_path, f"target-data/{source}/latest-{args.filename}.csv"))
+    target_data = pd.concat((target_data, target_source), ignore_index=True)
+
+# cut historical data
+target_data = target_data.loc[target_data.year_week >= "2023-W42"].reset_index(drop=True)
+
 quantile_baseline_forecasts = generate_baseline_forecast_fullpipeline(target_data, 
                                                                       target_name=str(args.target_name), 
                                                                       nsamples=int(args.nsamples),
                                                                       horizon=int(args.horizon),
                                                                       symmetrize=bool(args.symmetrize), 
-                                                                      origin_date=origin_date)
+                                                                      forecasting_weeks=forecasting_weeks)
 
 model_id = f"{str(args.team_abbr)}-{str(args.model_abbr)}"
-file_name = f"{origin_date.strftime('%Y-%m-%d')}-{model_id}.csv"
+file_name = f"{origin_date}-{model_id}.csv"
 quantile_baseline_forecasts.to_csv(os.path.join(args.hub_path, f"model-output/{model_id}/{file_name}"), index=False)
 
 env_file = os.getenv('GITHUB_OUTPUT')
