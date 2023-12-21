@@ -190,8 +190,9 @@ forecasting_weeks = import_forecasting_weeks(args.hub_path)
 # import target data from all sources
 target_data = pd.DataFrame()
 for source in data_sources:
-    target_source = pd.read_csv(os.path.join(args.hub_path, f"target-data/{source}/latest-{args.filename}.csv"))
-    target_data = pd.concat((target_data, target_source), ignore_index=True)
+    if os.path.exists(os.path.join(args.hub_path, f"target-data/{source}/latest-{args.filename}.csv")):
+        target_source = pd.read_csv(os.path.join(args.hub_path, f"target-data/{source}/latest-{args.filename}.csv"))
+        target_data = pd.concat((target_data, target_source), ignore_index=True)
 
 # cut historical data
 target_data = target_data.loc[target_data.year_week >= "2023-W42"].reset_index(drop=True)
