@@ -196,7 +196,7 @@ for source in data_sources:
 # cut historical data
 target_data = target_data.loc[target_data.year_week >= "2023-W42"].reset_index(drop=True)
 
-quantile_baseline_forecasts = generate_baseline_forecast_fullpipeline(target_data, 
+quantile_baseline_forecasts, origin_date = generate_baseline_forecast_fullpipeline(target_data, 
                                                                       target_name=str(args.target_name), 
                                                                       nsamples=int(args.nsamples),
                                                                       horizon=int(args.horizon),
