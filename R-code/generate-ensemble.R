@@ -74,3 +74,13 @@ ensemble_models <- lapply(unique_targets, function(target) {
 save_path_json = file.path(opt$hub_path, ".github/logs/ensemble-members/")
 file_name_json <- paste(max_origin_date_fmt, opt$team_id, opt$model_id, "ensemble_models.json", sep = "-")
 write_json(ensemble_models, path = paste0(save_path_json, file_name_json))
+
+
+env_file <- Sys.getenv("GITHUB_OUTPUT")
+save_path_env = file.path("model-output", paste(opt$team_id, opt$model_id, sep = "-"))
+file_name_env <- paste(as.Date(max_origin_date), opt$team_id, opt$model_id, sep = "-")
+full_path_env <- file.path(save_path_env, paste0(file_name_env, ".csv"))
+ensemble_file <- paste0("ensemble_file=", full_path_env)
+
+# Open the file in append mode and write the baseline_file content
+cat(ensemble_file, file = env_file, append = TRUE)
