@@ -28,8 +28,13 @@ models <- map(yaml_files, ~{
   return(NULL)
 }) %>%
   compact()  # Remove NULL entries
+
 # select only rows related to these models
 model_outputs <- model_outputs[model_outputs$model_id %in% models, ]
+
+# exclude NA rows
+model_outputs <- subset(model_outputs, !is.na(origin_date))
+
 # select only rows related to most recent forecast
 max_origin_date = max(model_outputs$origin_date)
 model_outputs <- model_outputs[model_outputs$origin_date == max_origin_date, ]
