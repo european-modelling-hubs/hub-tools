@@ -42,6 +42,9 @@ def merge_csv_files(files, output_file):
         else:
             print(f"File '{file}' not found. Skip!")
 
+    if not all_rows:
+        raise Exception(f"Source files are all empty\n")
+    
     # Save all the rows to a new CSV file
     with open(output_file, 'w', newline='') as csv_output:
         writer = csv.writer(csv_output)
