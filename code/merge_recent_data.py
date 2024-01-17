@@ -88,9 +88,9 @@ if not f_name:
     disease_name = os.getenv("disease_name")
     f_name = "latest-" + disease_name + "_incidence.csv"
 
-merge_list = args.source_list.split(" ")
+sources = args.source_list.split(" ")
 
 
-do_the_merge(repo=args.repository, root_folder=args.root, merge_list=args.merge_list, file_name=f_name)
+do_the_merge(repo=args.repository, root_folder=args.root, merge_list=sources, file_name=f_name)
 
 print("All the recents merged successfully")
