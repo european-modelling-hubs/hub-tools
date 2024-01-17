@@ -89,6 +89,9 @@ def do_the_merge (repo, root_folder, merge_list, file_name):
 f_name = args.file_name
 if not f_name:
     disease_name = os.getenv("disease_name")
+    if disease_name == "Influenza":
+        disease_name = "ILI"
+        
     f_name = "latest-" + disease_name + "_incidence.csv"
 
 sources = args.source_list.split(" ")
