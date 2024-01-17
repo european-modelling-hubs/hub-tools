@@ -78,6 +78,8 @@ def do_the_merge (repo, root_folder, merge_list, file_name):
     else:
       raise Exception(f"Can not do the merge, source list is empty\n")
 
+    print("do_the_merge completed")
+
 
 # get the disease name by the env since it is a repo var
 # this is used to compose the file_name to merge from given folders
@@ -90,3 +92,5 @@ merge_list = args.source_list.split(" ")
 
 
 do_the_merge(repo=args.repository, root_folder=args.root, merge_list=args.merge_list, file_name=f_name)
+
+print("All the recents merged successfully")
