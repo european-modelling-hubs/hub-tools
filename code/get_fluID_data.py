@@ -94,9 +94,8 @@ for country in fluID_countries[disease]:
 # save
 df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv"), index=False)
 snapshot_filename = closest_friday().strftime("%Y-%m-%d") + f"-{disease}_incidence.csv"
-snapshot_filepath = os.path.join(args.hub_path, f"target-data/FluID/snapshots/{snapshot_filename}")
-df_final.to_csv(snapshot_filepath, index=False)
+df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/snapshots/{snapshot_filename}"), index=False)
 
 env_file = os.getenv('GITHUB_OUTPUT')
 with open(env_file, "a") as outenv:
-   outenv.write (f"imported_snapshot={snapshot_filepath}")
+   outenv.write (f"imported_snapshot=target-data/FluID/snapshots/{snapshot_filename}")
