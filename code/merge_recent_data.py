@@ -50,8 +50,8 @@ def merge_csv_files(files, output_file):
         writer = csv.writer(csv_output)
         # write header
         if file_header:
-            file_header.append('source')
-            writer.writerow(header)
+            file_header.append('data_source')
+            writer.writerow(file_header)
         
         # and all the rows
         writer.writerows(all_rows)
