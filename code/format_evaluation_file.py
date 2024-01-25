@@ -4,7 +4,7 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--hub_path', default="./flu-forecast-hub-main")
+parser.add_argument('--hub_path', default="./")
 parser.add_argument('--baseline_team_abbr', default="respicast")
 parser.add_argument('--baseline_model_abbr', default="quantileBaseline")
 
@@ -12,7 +12,7 @@ args = parser.parse_args()
 metric_names = {"interval_score": "WIS", "ae_median": "AE"}
 
 # import forecast scoring 
-df_scores = pd.read_csv(os.path.join(args.hub_path, f"model-evaluation/temp/forecast_scores_summary.csv"))
+df_scores = pd.read_csv(os.path.join(args.hub_path, f"model-evaluation/forecast_scores_summary.csv"))
 
 # create team_id, model_id columns
 df_scores["team_id"] = df_scores["model"].apply(lambda x : str(x).split("-")[0])
