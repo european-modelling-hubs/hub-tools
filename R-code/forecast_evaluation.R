@@ -7,7 +7,7 @@ library("optparse")
 option_list = list(
   make_option("--hub_path", type = "character", default = "./", help = "Hub path", metavar = "character"),
   make_option("--truth_file_name", type = "character", default = "latest-ILI_incidence.csv", help = "Latest truth file name", metavar = "character"), 
-  make_option("--subfolders", type = "character", default = "ERVISS,FluID", help = "List of truth data folders", metavar = "character"),
+  make_option("--subfolders", type = "character", default = "ERVISS,FluID", help = "List of truth data folders", metavar = "character")
 );   
  
 opt_parser = OptionParser(option_list=option_list);
