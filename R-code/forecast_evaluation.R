@@ -4,7 +4,7 @@ library(hubUtils)
 library("dplyr")
 
 opt <- list(
-    hub_path = "./flu-forecast-hub-main",
+    hub_path = "./",
     truth_file_name = "latest-ILI_incidence.csv",
     subfolders = c("ERVISS", "FluID")
 )
