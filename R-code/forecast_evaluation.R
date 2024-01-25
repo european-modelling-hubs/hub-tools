@@ -14,7 +14,7 @@ opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser)
 
 # Read the truth data
-subfolders_list <- strsplit(opt$subfolders, ", ")
+subfolders_list <- strsplit(opt$subfolders, ",")
 subfolders <- unlist(subfolders_list)
 
 truth_data <- data.frame()
