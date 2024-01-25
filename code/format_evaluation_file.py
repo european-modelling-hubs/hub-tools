@@ -68,6 +68,6 @@ df_scores.to_csv(os.path.join(args.hub_path, f"model-evaluation/snapshots/{max_o
 
 env_file = os.getenv('GITHUB_OUTPUT')
 with open(env_file, "a") as outenv:
-   outenv.write (f"scoring_file_latest=model-evaluation/latest_forecast_scores.csv")
+   outenv.write (f"scoring_file_latest=model-evaluation/latest_forecast_scores.csv\n")
    outenv.write (f"scoring_file_snapshot=model-evaluation/snapshots/{max_origin_date}-forecast_scores.csv")
         
