@@ -1,17 +1,24 @@
-#install.packages("scoringutils")
 library(scoringutils)
 library(hubUtils)
 library("dplyr")
+library("optparse")
 
-opt <- list(
-    hub_path = "./",
-    truth_file_name = "latest-ILI_incidence.csv",
-    subfolders = c("ERVISS", "FluID")
-)
+# arguments 
+option_list = list(
+  make_option("--hub_path", type = "character", default = "./", help = "Hub path", metavar = "character"),
+  make_option("--truth_file_name", type = "character", default = "latest-ILI_incidence.csv", help = "Latest truth file name", metavar = "character"), 
+  make_option("--subfolders", type = "character", default = "ERVISS,FluID", help = "List of truth data folders", metavar = "character"),
+);   
+ 
+opt_parser = OptionParser(option_list=option_list);
+opt = parse_args(opt_parser)
 
 # Read the truth data
+subfolders_list <- strsplit(opt$subfolders, ", ")
+subfolders <- unlist(subfolders_list)
+
 truth_data <- data.frame()
-for (subfolder in opt$subfolders) {
+for (subfolder in subfolders) {
     truth_data_temp <- read.csv(paste0(opt$hub_path, "/target-data/", subfolder, "/", opt$truth_file_name), header = TRUE)
     truth_data <- rbind(truth_data, truth_data_temp)
 }
