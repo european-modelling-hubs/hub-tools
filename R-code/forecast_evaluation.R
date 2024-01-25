@@ -54,4 +54,4 @@ summ_scores <- forecast_scores %>%
   summarise_scores()
 
 # save
-write.csv(summ_scores, file = paste0(opt$hub_path, "/model-evaluation/temp/forecast_scores_summary.csv"), row.names = FALSE)
+write.csv(summ_scores, file = paste0(opt$hub_path, "/model-evaluation/forecast_scores_summary.csv"), row.names = FALSE)
