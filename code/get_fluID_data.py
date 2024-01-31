@@ -91,11 +91,17 @@ for country in fluID_countries[disease]:
     df_country = get_location_data(df_fluid, country, weekmin, f"{disease}_CASE", f"{disease}_POP_COV", age_grp = "All")
     df_final = pd.concat((df_final, df_country), ignore_index=True)
 
-# save
-df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv"), index=False)
-snapshot_filename = closest_friday().strftime("%Y-%m-%d") + f"-{disease}_incidence.csv"
-df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/snapshots/{snapshot_filename}"), index=False)
+# check that the df_final contains new data
+max_date_new = df_final.year_week.max()
+df_old = pd.read_csv(os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv"))
+max_date_old = df_old.year_week.max()
 
-env_file = os.getenv('GITHUB_OUTPUT')
-with open(env_file, "a") as outenv:
-   outenv.write (f"imported_snapshot=target-data/FluID/snapshots/{snapshot_filename}")
+if max_date_new != max_date_old:
+    # save
+    df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv"), index=False)
+    snapshot_filename = closest_friday().strftime("%Y-%m-%d") + f"-{disease}_incidence.csv"
+    df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/snapshots/{snapshot_filename}"), index=False)
+
+    env_file = os.getenv('GITHUB_OUTPUT')
+    with open(env_file, "a") as outenv:
+        outenv.write (f"imported_snapshot=target-data/FluID/snapshots/{snapshot_filename}")
