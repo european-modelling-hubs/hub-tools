@@ -113,7 +113,6 @@ def updateForecastsJson(json_file_path, changes):
 
 def storeStdData (data, db_file):
     print ("Storing data")
-    #"/home/runner/work/the-hub/the-hub/./repo/.github/data-storage/" + db_file
     db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/", db_file)
     print(f"DB path: {db_path}")
     updateJsonData(db_path, data)
@@ -157,6 +156,8 @@ def store(to_store):
     ensemble_changes = []
     metadata_changes = []
     targetdata_changes = []
+    evaluation_changes = []
+
     
     # 
     for fchanged in fchanges:
@@ -174,6 +175,9 @@ def store(to_store):
         elif fchanged.startswith("target-data") and not 'latest-' in fchanged:
             # save target-data
             targetdata_changes.append(fchanged)
+        elif fchanged.startswith("model-evaluation") and not 'latest-' in fchanged:
+            # save evaluation-data
+            evaluation_changes.append(fchanged)
         else :
             # unknown just discard
             print ('Unkown file submitted! Skip it')
@@ -195,6 +199,9 @@ def store(to_store):
         print (f"{len(targetdata_changes)} changes in targetdata")
         storeTargetData(targetdata_changes)
 
+    if evaluation_changes:
+        print (f"{len(evaluation_changes)} changes in targetdata")
+        storeStdData(evaluation_changes, "evaluation_db.json")
 
 
 if __name__ == "__main__":
