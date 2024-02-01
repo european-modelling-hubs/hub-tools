@@ -157,6 +157,8 @@ def store(to_store):
     ensemble_changes = []
     metadata_changes = []
     targetdata_changes = []
+    evaluation_changes = []
+
     
     # 
     for fchanged in fchanges:
@@ -174,6 +176,9 @@ def store(to_store):
         elif fchanged.startswith("target-data") and not 'latest-' in fchanged:
             # save target-data
             targetdata_changes.append(fchanged)
+        elif fchanged.startswith("model-evaluation") and not 'latest-' in fchanged:
+            # save evaluation-data
+            evaluation_changes.append(fchanged)
         else :
             # unknown just discard
             print ('Unkown file submitted! Skip it')
@@ -195,6 +200,9 @@ def store(to_store):
         print (f"{len(targetdata_changes)} changes in targetdata")
         storeTargetData(targetdata_changes)
 
+    if evaluation_changes:
+        print (f"{len(evaluation_changes)} changes in targetdata")
+        storeStdData(evaluation_changes, "evaluation_db.json")
 
 
 if __name__ == "__main__":
