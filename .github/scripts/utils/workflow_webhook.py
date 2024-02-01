@@ -162,7 +162,10 @@ def run ():
         wh_url = wh_url + "forecast/"
     elif data_type == 'target':
         jpayload['targets'] = jdata
-        wh_url = wh_url + "truth/"        
+        wh_url = wh_url + "truth/"
+    elif data_type == 'scoring':
+        jpayload["changes"] = jdata["changes"]
+        wh_url = wh_url + "evaluation/"
     else:
         jpayload["changes"] = jdata["changes"]
         wh_url = wh_url + "model-metadata/"
