@@ -9,7 +9,7 @@ import store_changes as stc
 def emptyDb(db_path):
     empty_json = dict() 
 
-    print ("Emptying db")
+    print (f"Emptying db {db_path}")
 
     try:
         with open(db_path, 'w') as fdb:
@@ -49,6 +49,9 @@ def run(storage_type, not_ingested):
     elif storage_type == "model-metadata":
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/metadata_db.json")
         
+    elif storage_type == "scoring":
+        db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/evaluation_db.json")
+
     elif storage_type == "target":
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/target_db.json")
 
