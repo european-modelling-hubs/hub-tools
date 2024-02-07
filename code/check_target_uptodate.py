@@ -94,9 +94,12 @@ if target in updates:
     if  updates[target] >= last_friday:
         uptodate = 'true'
 
-print (f"Target uptodate = {uptodate}")
 
-# write to the output env
-env_file = os.getenv('GITHUB_OUTPUT')
-with open(env_file, "a") as outenv:
-   outenv.write (f"target_uptodate={uptodate}")
+return uptodate
+
+# print (f"Target uptodate = {uptodate}")
+
+# # write to the output env
+# env_file = os.getenv('GITHUB_OUTPUT')
+# with open(env_file, "a") as outenv:
+#    outenv.write (f"target_uptodate={uptodate}")
