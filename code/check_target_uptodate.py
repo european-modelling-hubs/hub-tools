@@ -95,7 +95,7 @@ if target in updates:
         uptodate = 'true'
 
 
-return uptodate
+print(uptodate)
 
 # print (f"Target uptodate = {uptodate}")
 
