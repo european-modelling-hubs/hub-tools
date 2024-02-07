@@ -19,7 +19,7 @@ disease = str(args.disease)
 fluID_countries = {"ILI": ["CH"], "ARI": []}
 
 
-def import_fluID(fluid_url = 'https://frontdoor-l4uikgap6gz3m.azurefd.net/FLUMART/VIW_FID_EPI?$format=csv'): 
+def import_fluID(fluid_url = "https://xmart-api-public.who.int/FLUMART/VIW_FID?$format=csv"): 
     return pd.read_csv(fluid_url)
 
 
@@ -54,7 +54,7 @@ def parse_week(ISOYW):
     return year + "-W" + week
 
 
-def get_location_data(df_fluid, location, weekmin, num_col, den_col, age_grp = "All"): 
+def get_location_data(df_fluid, location, weekmin, disease, age_grp = "All"): 
         
     # select data for country
     df_fluid_location = df_fluid.loc[df_fluid.location == location]
@@ -64,12 +64,17 @@ def get_location_data(df_fluid, location, weekmin, num_col, den_col, age_grp = "
 
     # select age group 
     df_fluid_location = df_fluid_location.loc[df_fluid_location.AGEGROUP_CODE == age_grp]
-    df_fluid_location = df_fluid_location[["location", "ISOYW", "ISO_WEEKSTARTDATE", num_col, den_col]]
+    
+    # select disease
+    df_fluid_location = df_fluid_location.loc[df_fluid_location.CASE_INFO == disease]
+    
+    
+    df_fluid_location = df_fluid_location[["location", "ISOYW", "ISO_WEEKSTARTDATE", "REPORTED_CASES", "POP_COV"]]
 
     df_fluid_location.sort_values(by="ISOYW", ignore_index=True, inplace=True)
 
     # compute incidence 
-    df_fluid_location["value"] = df_fluid_location[num_col] / df_fluid_location[den_col] * 100000
+    df_fluid_location["value"] = df_fluid_location["REPORTED_CASES"] / df_fluid_location["POP_COV"] * 100000
 
     # format 
     df_fluid_location["truth_date"] = pd.to_datetime(df_fluid_location["ISO_WEEKSTARTDATE"]) + timedelta(days=6)
@@ -88,7 +93,7 @@ df_fluid["location"] = df_fluid["COUNTRY_CODE"].apply(iso3_to_iso2)
 # parse data 
 df_final = pd.DataFrame() 
 for country in fluID_countries[disease]:
-    df_country = get_location_data(df_fluid, country, weekmin, f"{disease}_CASE", f"{disease}_POP_COV", age_grp = "All")
+    df_country = get_location_data(df_fluid, country, weekmin, disease, age_grp = "All")
     df_final = pd.concat((df_final, df_country), ignore_index=True)
 
 # check that the df_final contains new data
