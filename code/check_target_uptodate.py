@@ -100,8 +100,7 @@ if target in updates:
         uptodate = 'true'
 
 
-# print(uptodate)
-print('Pippo')
+print(uptodate)
 
 # print (f"Target uptodate = {uptodate}")
 
