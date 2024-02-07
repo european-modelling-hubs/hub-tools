@@ -89,7 +89,11 @@ if disease_name == "Influenza":
 disease_k = f"{disease_name} incidence"
 
 last_friday = getLastByDay(w_day)
+print(f"last f: {last_friday}")
+
 updates = get_updates(repository=repo, disease_key=disease_k)
+print(f"Updates: {updates}")
+
 
 if target in updates:
     if  updates[target] >= last_friday:
