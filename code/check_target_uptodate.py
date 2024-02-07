@@ -56,6 +56,7 @@ def get_updates (repository, disease_key):
 
     try:
         target_db = os.path.join(repository, '.github/data-storage/target_db.json')
+        print (f"Loading {target_db}")
         with open (target_db, "r") as j_src:
             j_data = json.load(j_src)
             j_changes = j_data[disease_key]['changes']            
