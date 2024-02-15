@@ -42,9 +42,18 @@ def closest_friday():
 
 def iso3_to_iso2(iso3_code):
     try:
-        country = pycountry.countries.get(alpha_3=iso3_code)
-        iso2_code = country.alpha_2
-        return iso2_code
+        if iso3_code == "X09": 
+             return "GB-ENG"
+        elif iso3_code == "X10": 
+             return "GB-WLS"
+        elif iso3_code == "X11":
+             return "GB-NIR"
+        elif iso3_code == "X12":
+             return "GB-SCT"
+        else:
+            country = pycountry.countries.get(alpha_3=iso3_code)
+            iso2_code = country.alpha_2
+            return iso2_code
     except AttributeError:
         return None
     
