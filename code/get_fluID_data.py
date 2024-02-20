@@ -16,7 +16,7 @@ weekmin = int(args.weekmin)
 disease = str(args.disease)
 
 # list of countries with flu_ID data
-fluID_countries = {"ILI": ["CH"], "ARI": []}
+fluID_countries = {"ILI": ["CH", "GB-ENG", "GB-WLS", "GB-NIR", "GB-SCT"], "ARI": []}
 
 
 def import_fluID(fluid_url = "https://xmart-api-public.who.int/FLUMART/VIW_FID?$format=csv"): 
