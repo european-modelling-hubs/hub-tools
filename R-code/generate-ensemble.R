@@ -41,7 +41,7 @@ model_outputs <- model_outputs[model_outputs$origin_date == max_origin_date, ]
 
 # exclude models with extreme values
 model_outputs <- model_outputs %>%
-  group_by(model_id) %>%
+  group_by(model_id, location) %>%
   filter(all(value <= 30000))
 
 # generate ensemble
