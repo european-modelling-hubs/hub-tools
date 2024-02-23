@@ -19,7 +19,7 @@ forecasting_weeks_last.sort_values(by="horizon", inplace=True, ignore_index=True
 
 # update forecasting weeks
 forecasting_weeks_new = pd.DataFrame(data={
-    "horizon": [1,2,3,4],
+    "horizon": [-1,0,1,2,3,4],
     "target_end_date": [parse_date(el) + timedelta(days=7) for el in forecasting_weeks_last.target_end_date.values]})
 forecasting_weeks_new.insert(0, "origin_date", parse_date(forecasting_weeks_last.origin_date.values[0]) + timedelta(days=7))
 forecasting_weeks_new.insert(forecasting_weeks_new.shape[0] - 1, "submission_round", forecasting_weeks_last.submission_round.values[0] + 1)
