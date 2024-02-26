@@ -181,7 +181,7 @@ def store(to_store):
             evaluation_changes.append(fchanged)
         else :
             # unknown just discard
-            print ('Unkown file submitted! Skip it')
+            print (f'Unkown file submitted {fchanged}! Skip it')
 
 
     if model_changes:
