@@ -208,7 +208,4 @@ def store(to_store):
 if __name__ == "__main__":
 
     store_data = os.getenv("data")        
-    # jchanges = json.loads(store_data)
-    
-    # store(jchanges["pr-changes"])
     store(store_data)
