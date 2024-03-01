@@ -23,7 +23,7 @@ args = parser.parse_args()
 
 def import_forecasting_weeks(path): 
     forecasting_weeks = pd.read_csv(f"./{path}/supporting-files/forecasting_weeks.csv")
-    forecasting_weeks = forecasting_weeks.loc[forecasting_weeks.is_latest == True]
+    forecasting_weeks = forecasting_weeks.loc[(forecasting_weeks.is_latest == True) & (forecasting_weeks.horizon.isin([1,2,3,4]))]
     return forecasting_weeks
     
 
