@@ -1,5 +1,5 @@
 library(scoringutils)
-library(hubUtils)
+library(hubData)
 library("dplyr")
 library("optparse")
 
@@ -32,7 +32,7 @@ truth_data$target_end_date <- as.Date(truth_data$target_end_date, format = "%Y-%
 
 
 # connect to hub
-model_outputs <- hubUtils::connect_hub(hub_path = opt$hub_path) %>%
+model_outputs <- hubData::connect_hub(hub_path = opt$hub_path) %>%
   dplyr::collect()
 
 # rename model output columns 
