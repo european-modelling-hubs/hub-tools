@@ -1,4 +1,4 @@
-library(hubUtils)
+library(hubData)
 library(dplyr)
 library(hubEnsembles)
 library(jsonlite)
@@ -16,7 +16,7 @@ option_list = list(
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser)
 # connect to hub
-model_outputs <- hubUtils::connect_hub(hub_path = opt$hub_path) %>%
+model_outputs <- hubData::connect_hub(hub_path = opt$hub_path) %>%
   dplyr::collect()
 # get list of models to include in the ensemble
 yaml_files <- list.files(path = file.path(opt$hub_path, "model-metadata"), pattern = "\\.yml$", full.names = TRUE)
