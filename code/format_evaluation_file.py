@@ -45,7 +45,7 @@ for index, row in df_scores.iterrows():
                                       (baseline_data['metric'] == row['metric'])]
    if not temp_baseline.empty:
       #df_scores.at[index, 'value_relative'] = np.log2(temp_baseline['value_absolute'].values[0] / row['value_absolute'])
-      df_scores.at[index, 'value_relative'] = 1 - row.value_absolute / df_temp_baseline.value_absolute.values[0]
+      df_scores.at[index, 'value_relative'] = 1 - row.value_absolute / temp_baseline.value_absolute.values[0]
 
 # remove rows where value relative is NaN
 df_scores = df_scores.loc[df_scores.value_relative.notnull()].reset_index(drop=True)
