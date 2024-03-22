@@ -62,7 +62,7 @@ df_scores["rank"] = df_scores["rank"].astype(int)
 # compute rank_score
 forecast_rounds = df_scores[['origin_date', 'target', 'target_end_date', 
                              'horizon', 'location', 'metric']].drop_duplicates()
-df_scores["rank_score"] = np.nan
+df_scores["rank_score"] = 0.0
 for index, row in forecast_rounds.iterrows():
     temp_df = df_scores.loc[(df_scores['origin_date'] == row['origin_date']) & \
                             (df_scores['target'] == row['target']) & \
