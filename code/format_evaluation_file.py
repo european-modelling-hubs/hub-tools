@@ -29,24 +29,22 @@ df_scores = pd.melt(df_scores,
 df_scores = df_scores.loc[df_scores.metric.isin(["interval_score", "ae_median"])].reset_index(drop=True)
 df_scores["metric"] = df_scores["metric"].apply(lambda x : metric_names[x])
 
-# compute relative values (forecast_skill)
-value_relative = []
-for _, row in df_scores.iterrows():
-    # get baseline metric value 
-    df_temp_baseline = df_scores.loc[(df_scores.origin_date == row.origin_date) & \
-                                       (df_scores.target == row.target) & \
-                                          (df_scores.target_end_date == row.target_end_date) & \
-                                             (df_scores.horizon == row.horizon) & \
-                                                (df_scores.location == row.location) & \
-                                                   (df_scores.team_id == str(args.baseline_team_abbr)) & \
-                                                      (df_scores.model_id == str(args.baseline_model_abbr)) & \
-                                                         (df_scores.metric == row.metric)]
-    # baseline not found
-    if df_temp_baseline.shape[0] == 0: 
-       value_relative.append(np.nan)
-    else: 
-       value_relative.append(1 - row.value_absolute / df_temp_baseline.value_absolute.values[0])
-df_scores["value_relative"] = value_relative
+# Filter baseline data
+baseline_filter = (df_scores['team_id'] == str(args.baseline_team_abbr)) & \
+                  (df_scores['model_id'] == str(args.baseline_model_abbr))
+baseline_data = df_scores.loc[baseline_filter]
+
+# Compute relative values
+df_scores["value_relative"] = np.nan
+for index, row in df_scores.iterrows():
+   temp_baseline = baseline_data.loc[(baseline_data['origin_date'] == row['origin_date']) & \
+                                      (baseline_data['target'] == row['target']) & \
+                                      (baseline_data['target_end_date'] == row['target_end_date']) & \
+                                      (baseline_data['horizon'] == row['horizon']) & \
+                                      (baseline_data['location'] == row['location']) & \
+                                      (baseline_data['metric'] == row['metric'])]
+   if not temp_baseline.empty:
+      df_scores.at[index, 'value_relative'] = np.log2(temp_baseline['value_absolute'].values[0] / row['value_absolute'])
 
 # remove rows where value relative is NaN
 df_scores = df_scores.loc[df_scores.value_relative.notnull()].reset_index(drop=True)
@@ -60,11 +58,26 @@ df_scores = pd.merge(left=df_scores, right=df_nmodels, on=["origin_date", "targe
 df_scores["rank"] = df_scores.groupby(by=["origin_date", "target", "target_end_date", "horizon", "location", "metric"], as_index=False).value_absolute.rank(method="min")
 df_scores["rank"] = df_scores["rank"].astype(int)
 
+# compute rank_score
+forecast_rounds = df_scores[['origin_date', 'target', 'target_end_date', 
+                             'horizon', 'location', 'metric']].drop_duplicates()
+df_scores["rank_score"] = np.nan
+for index, row in forecast_rounds.iterrows():
+    temp_df = df_scores.loc[(df_scores['origin_date'] == row['origin_date']) & \
+                            (df_scores['target'] == row['target']) & \
+                            (df_scores['target_end_date'] == row['target_end_date']) & \
+                            (df_scores['horizon'] == row['horizon']) & \
+                            (df_scores['location'] == row['location']) & \
+                            (df_scores['metric'] == row['metric'])]
+    
+    max_value_rel, min_value_rel = np.max(temp_df["value_absolute"]), np.min(temp_df["value_absolute"])
+    if len(temp_df) > 1: 
+        df_scores.loc[temp_df.index, 'rank_score']  = temp_df["value_absolute"].apply(lambda x : (max_value_rel - x) / (max_value_rel - min_value_rel))
+
 # save 
 max_origin_date = df_scores.origin_date.max()
 df_scores.to_csv(os.path.join(args.hub_path, f"model-evaluation/latest-forecast_scores.csv"), index=False)
 df_scores.to_csv(os.path.join(args.hub_path, f"model-evaluation/snapshots/{max_origin_date}-forecast_scores.csv"), index=False)
-
 
 env_file = os.getenv('GITHUB_OUTPUT')
 with open(env_file, "a") as outenv:
