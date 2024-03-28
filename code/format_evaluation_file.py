@@ -60,20 +60,20 @@ df_scores["rank"] = df_scores.groupby(by=["origin_date", "target", "target_end_d
 df_scores["rank"] = df_scores["rank"].astype(int)
 
 # compute rank_score
-#forecast_rounds = df_scores[['origin_date', 'target', 'target_end_date', 
-#                             'horizon', 'location', 'metric']].drop_duplicates()
-#df_scores["rank_score"] = 0.0
-#for index, row in forecast_rounds.iterrows():
-#    temp_df = df_scores.loc[(df_scores['origin_date'] == row['origin_date']) & \
-#                            (df_scores['target'] == row['target']) & \
-#                            (df_scores['target_end_date'] == row['target_end_date']) & \
-#                            (df_scores['horizon'] == row['horizon']) & \
-#                            (df_scores['location'] == row['location']) & \
-#                            (df_scores['metric'] == row['metric'])]
-#    
-#    max_value_rel, min_value_rel = np.max(temp_df["value_absolute"]), np.min(temp_df["value_absolute"])
-#    if len(temp_df) > 1: 
-#        df_scores.loc[temp_df.index, 'rank_score']  = temp_df["value_absolute"].apply(lambda x : (max_value_rel - x) / (max_value_rel - min_value_rel))
+forecast_rounds = df_scores[['origin_date', 'target', 'target_end_date', 
+                             'horizon', 'location', 'metric']].drop_duplicates()
+df_scores["rank_score"] = 0.0
+for index, row in forecast_rounds.iterrows():
+    temp_df = df_scores.loc[(df_scores['origin_date'] == row['origin_date']) & \
+                            (df_scores['target'] == row['target']) & \
+                            (df_scores['target_end_date'] == row['target_end_date']) & \
+                            (df_scores['horizon'] == row['horizon']) & \
+                            (df_scores['location'] == row['location']) & \
+                            (df_scores['metric'] == row['metric'])]
+    
+    max_value_rel, min_value_rel = np.max(temp_df["value_absolute"]), np.min(temp_df["value_absolute"])
+    if len(temp_df) > 1: 
+        df_scores.loc[temp_df.index, 'rank_score']  = temp_df["value_absolute"].apply(lambda x : (max_value_rel - x) / (max_value_rel - min_value_rel))
 
 # save 
 max_origin_date = df_scores.origin_date.max()
