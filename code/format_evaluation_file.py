@@ -50,6 +50,9 @@ for index, row in df_scores.iterrows():
 # remove rows where value relative is NaN
 df_scores = df_scores.loc[df_scores.value_relative.notnull()].reset_index(drop=True)
 
+# fix inf values 
+df_scores.loc[df_scores.value_relative == np.inf, "value_relative"] = 10.
+
 # compute number of models 
 df_nmodels = df_scores.groupby(by=["origin_date", "target", "target_end_date", "horizon", "location", "metric"], as_index=False).model_id.nunique()
 df_nmodels.rename(columns={"model_id": "n_models"}, inplace=True)
