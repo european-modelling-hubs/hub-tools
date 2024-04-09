@@ -1,7 +1,7 @@
 import json
 import os
 import argparse
-import store_changes as stc
+import persist_changes as stc
 
 
 
