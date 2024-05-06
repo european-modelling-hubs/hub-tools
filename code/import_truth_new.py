@@ -42,6 +42,7 @@ except urllib.error.HTTPError:
 
 
 # Read data
+print (f'Reading from Http url {url}')
 
 lines = [line.decode('utf-8') for line in response.readlines()]
 
@@ -51,7 +52,7 @@ target_records = [('location', 'truth_date', 'year_week', 'value')]
 
 for row in csv_reader:
     if (row['survtype'] != 'primary care syndromic'
-            or row['indicator'] != '{target_name}consultationrate'
+            or row['indicator'] != '{disease_name}consultationrate'
             or row['age'] != 'total'
        ):
         continue
