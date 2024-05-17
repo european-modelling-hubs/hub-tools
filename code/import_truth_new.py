@@ -22,7 +22,7 @@ hub_path=str(args.hub_path)
 disease_name=str(args.disease_name)
 
 url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_ILIARIRates.csv'
-out_files_target = ['target-data/ERVISS/latest_new-{disease_name}_incidence.csv', 'target-data/ERVISS/snapshots/{report_date}-{disease_name}_incidence_new.csv']
+out_files_target = ['target-data/ERVISS/latest-{disease_name}_incidence.csv', 'target-data/ERVISS/snapshots/{report_date}-{disease_name}_incidence.csv']
 
 countries_to_x1000 = ('Malta', 'Luxembourg', 'Cyprus') # Values for this countries must be multiplied by 1000
 
