@@ -123,4 +123,4 @@ if max_date_new != max_date_old:
     with open(env_file, "a") as outenv:
         outenv.write (f"imported_snapshot=target-data/FluID/snapshots/{snapshot_filename}")
 else:
-    print("Nothing to update")
+    print(f"Nothing to update: new: {max_date_new}, old: {max_date_old}")
