@@ -117,7 +117,7 @@ if max_date_new != max_date_old:
     snapshot_filename = closest_friday().strftime("%Y-%m-%d") + f"-{disease}_incidence.csv"
     df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/snapshots/{snapshot_filename}"), index=False)
 
-    print(f"Updating {snapshot_filename}")
+    print(f"Updating: {snapshot_filename}")
 
     env_file = os.getenv('GITHUB_OUTPUT')
     with open(env_file, "a") as outenv:
