@@ -43,17 +43,17 @@ def updateTargetJson (json_file_path, out_data):
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")    
 
 
-def storeForecasts (forecasts, isEnsemble = False):
+def storeProjections (projections, isEnsemble = False):
 
-    team = os.path.basename(os.path.split(forecasts[0])[0]).split('-')[0]
+    team = os.path.basename(os.path.split(projections[0])[0]).split('-')[0]
     if not team:
-     raise Exception(f"invalid input data  {forecasts}\n")
+     raise Exception(f"invalid input data  {projections}\n")
 
     out_data = {}    
     out_data['team'] = team
     out_data['models'] = []
 
-    for forecast in forecasts:
+    for forecast in projections:
 
         #get the model name from path
         model = tuple(os.path.basename(os.path.split(forecast)[0]).split('-'))[1]
@@ -142,54 +142,49 @@ def updateJsonData (json_file_path, changes):
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
 
 
-def store(to_store):
+
+
+"""
+The store functions get the list of changes and, based on path and file-type stores
+the changes in the corresponding json db
+input: blac
+"""
+def store(changes_list):
 
     # Make a list out of the changed files
-    fchanges = to_store.split(" ")
+    changes = changes_list.split(" ")
 
     # List should not be empty
-    if not fchanges:
+    if not changes:
         raise Exception(f"Empty commit")
     
 
     model_changes = []
-    ensemble_changes = []
     metadata_changes = []
     targetdata_changes = []
-    evaluation_changes = []
 
     
     # 
-    for fchanged in fchanges:
+    for change in changes:
                 
         # needed for different deepness of paths
-        if fchanged.startswith("model-output" + os.path.sep + "respicast-hubEnsemble"  + os.path.sep) or fchanged.startswith("model-output" + os.path.sep + "respicast-quantileBaseline"  + os.path.sep):
-            # add to ensemble
-            ensemble_changes.append(fchanged)
-        elif fchanged.startswith("model-output"):
+        if change.startswith("model-output"):
             # save model output
-            model_changes.append(fchanged)
-        elif fchanged.startswith("model-metadata"):
+            model_changes.append(change)
+        elif change.startswith("model-metadata"):
             # save meta-data
-            metadata_changes.append(fchanged)
-        elif fchanged.startswith("target-data") and not 'latest-' in fchanged:
+            metadata_changes.append(change)
+        elif change.startswith("target-data") and not 'latest-' in change:
             # save target-data
-            targetdata_changes.append(fchanged)
-        elif fchanged.startswith("model-evaluation") and not 'latest-' in fchanged:
-            # save evaluation-data
-            evaluation_changes.append(fchanged)
+            targetdata_changes.append(change)
         else :
             # unknown just discard
-            print (f'Unkown file submitted {fchanged}! Skip it')
+            print (f'Unkown file submitted {change}! Skip it')
 
 
     if model_changes:
         print (f"{len(model_changes)} changes in model-output")
-        storeForecasts(model_changes)
-
-    if ensemble_changes:
-        print (f"{len(ensemble_changes)} changes in hub ensemble")
-        storeForecasts(ensemble_changes, isEnsemble = True)
+        storeProjections(model_changes)
     
     if metadata_changes:
         print (f"{len(metadata_changes)} changes in model-metadata")
@@ -199,12 +194,15 @@ def store(to_store):
         print (f"{len(targetdata_changes)} changes in targetdata")
         storeTargetData(targetdata_changes)
 
-    if evaluation_changes:
-        print (f"{len(evaluation_changes)} changes in targetdata")
-        storeStdData(evaluation_changes, "evaluation_db.json")
+
 
 
 if __name__ == "__main__":
 
-    store_data = os.getenv("data")        
-    store(store_data)
+    """
+    Get the list of changes within the PR in the 'data' environment variable
+    Data to be stored are then passed to the store_data function
+    """
+
+    changes_list = os.getenv("data")        
+    store(changes_list)
