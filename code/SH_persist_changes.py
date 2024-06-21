@@ -1,7 +1,9 @@
 import os
 import json
 
-
+"""
+Persists changes in the target-data list to the specific storage target_db.json
+"""
 def storeTargetData (target_data):
     # get the target name from path 
     
@@ -17,6 +19,9 @@ def storeTargetData (target_data):
         updateTargetJson(db_path, out_data)
 
 
+"""
+Format record for each target truth and store in the target_db.json
+"""
 def updateTargetJson (json_file_path, out_data):
 
     json_data = None
@@ -43,6 +48,9 @@ def updateTargetJson (json_file_path, out_data):
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")    
 
 
+"""
+Format record for each projection and store in the projections_db.json
+"""
 def storeProjections (projections, isEnsemble = False):
 
     team = os.path.basename(os.path.split(projections[0])[0]).split('-')[0]
@@ -53,23 +61,27 @@ def storeProjections (projections, isEnsemble = False):
     out_data['team'] = team
     out_data['models'] = []
 
-    for forecast in projections:
+    for projection in projections:
 
-        #get the model name from path
-        model = tuple(os.path.basename(os.path.split(forecast)[0]).split('-'))[1]
+        # get the model name from path
+        model = tuple(os.path.basename(os.path.split(projection)[0]).split('-'))[1]
 
         model_entry = next((item for item in out_data['models'] if item["model"] == model), None)
         if model_entry is None:
-            out_data['models'].append({"model" : model, "changes": [forecast]})
+            out_data['models'].append({"model" : model, "changes": [projection]})
         else:
-            model_entry["changes"].append(forecast)
+            model_entry["changes"].append(projection)
 
     if out_data['models']:        
-        db_path = os.path.join(os.getcwd(), "repo/.github/data-storage" + os.path.sep + ("ensemble_db.json" if isEnsemble else "changes_db.json"))
+        db_path = os.path.join(os.getcwd(), "repo/.github/data-storage" + os.path.sep + ("ensemble_db.json" if isEnsemble else "projections_db.json"))
         print(f"DB path: {db_path}")
         updateForecastsJson(db_path, out_data)
     
 
+
+"""
+update model-output 
+"""
 def updateForecastsJson(json_file_path, changes):
 
     json_data = None
@@ -110,10 +122,14 @@ def updateForecastsJson(json_file_path, changes):
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
         
 
+"""
+Function 
+"""
 def storeStdData (data, db_file):
-    print ("Storing data")
-    #"/home/runner/work/the-hub/the-hub/./repo/.github/data-storage/" + db_file
+    
+    print ("Storing data")    
     db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/", db_file)
+    
     print(f"DB path: {db_path}")
     updateJsonData(db_path, data)
 
