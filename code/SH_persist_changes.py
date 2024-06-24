@@ -163,6 +163,17 @@ def updateJsonData (json_file_path, changes):
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
 
+    # trace before exit
+    
+    try:
+        with open (json_file_path, 'r') as fdb:
+            jout = json.load(fdb)
+            print(f"Json db content on exit: \n{jout}")
+            
+    except FileNotFoundError:
+        # If the file doesn't exist, handle error
+        raise Exception(f"Json file not found {json_file_path}\n")
+
 
 
 
