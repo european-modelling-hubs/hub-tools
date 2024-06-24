@@ -132,6 +132,8 @@ def storeStdData (data, db_file):
     db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/", db_file)
     
     print(f"DB path: {db_path}")
+    print(f"data: {data}")
+    
     updateJsonData(db_path, data)
 
 
@@ -150,6 +152,8 @@ def updateJsonData (json_file_path, changes):
         raise Exception(f"Json file not found {json_file_path}\n")
 
     json_data["changes"] = changes if "changes" not in json_data else list(set(json_data["changes"] + changes))
+
+    print(f"Writing changes: {json_data}")
 
     try:
         with open(json_file_path, 'w') as fdb:
