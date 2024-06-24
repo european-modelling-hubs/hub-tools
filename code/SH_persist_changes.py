@@ -76,14 +76,14 @@ def storeProjections (projections, isEnsemble = False):
         db_path = os.path.join(os.getcwd(), "repo/.github/data-storage" + os.path.sep + ("ensemble_db.json" if isEnsemble else "projections_db.json"))
         print(f"DB path: {db_path}")
         print(f"saving data: {out_data}")
-        updateForecastsJson(db_path, out_data)
+        updateProjectionsJson(db_path, out_data)
     
 
 
 """
 update model-output 
 """
-def updateForecastsJson(json_file_path, changes):
+def updateProjectionsJson(json_file_path, changes):
 
     json_data = None
 
@@ -157,6 +157,7 @@ def updateJsonData (json_file_path, changes):
 
     try:
         with open(json_file_path, 'w') as fdb:
+            print(f"Writing {json_data} to json file")
             json.dump(json_data, fdb, indent=4)
     except:
         # If the file doesn't exist, handle error
