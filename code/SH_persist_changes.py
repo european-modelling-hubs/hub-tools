@@ -75,6 +75,7 @@ def storeProjections (projections, isEnsemble = False):
     if out_data['models']:        
         db_path = os.path.join(os.getcwd(), "repo/.github/data-storage" + os.path.sep + ("ensemble_db.json" if isEnsemble else "projections_db.json"))
         print(f"DB path: {db_path}")
+        print(f"saving data: {out_data}")
         updateForecastsJson(db_path, out_data)
     
 
