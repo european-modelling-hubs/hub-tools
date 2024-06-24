@@ -30,7 +30,9 @@ def updateTargetJson (json_file_path, out_data):
     # Step 1: Read the existing data from the JSON file
     try:
         with open (json_file_path, 'r') as fdb:
-            json_data = json.load(fdb)            
+            json_data = json.load(fdb)
+            fdb.close()
+            
     except FileNotFoundError:
         # If the file doesn't exist, handle error
         raise Exception(f"Json file not found {json_file_path}\n")
@@ -43,6 +45,8 @@ def updateTargetJson (json_file_path, out_data):
     try:
         with open(json_file_path, 'w') as fdb:
             json.dump(json_data, fdb, indent=4)
+            fdb.close()
+            
     except:
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")    
@@ -93,7 +97,9 @@ def updateProjectionsJson(json_file_path, changes):
     # Step 1: Read the existing data from the JSON file
     try:
         with open (json_file_path, 'r') as fdb:
-            json_data = json.load(fdb)            
+            json_data = json.load(fdb) 
+            fdb.close()
+            
     except FileNotFoundError:
         # If the file doesn't exist, handle error
         raise Exception(f"Json file not found {json_file_path}\n")
@@ -118,6 +124,8 @@ def updateProjectionsJson(json_file_path, changes):
     try:
         with open(json_file_path, 'w') as fdb:
             json.dump(json_data, fdb, indent=4)
+            fdb.close()
+            
     except:
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
@@ -146,6 +154,7 @@ def updateJsonData (json_file_path, changes):
         with open (json_file_path, 'r') as fdb:
             json_data = json.load(fdb)
             print(f"JSON DB CONTENT: \n{json_data}")
+            fdb.close()
             
     except FileNotFoundError:
         # If the file doesn't exist, handle error
@@ -159,6 +168,8 @@ def updateJsonData (json_file_path, changes):
         with open(json_file_path, 'w') as fdb:
             print(f"Writing {json_data} to json file")
             json.dump(json_data, fdb, indent=4)
+            fdb.close()
+            
     except:
         # If the file doesn't exist, handle error
         raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")
@@ -168,6 +179,7 @@ def updateJsonData (json_file_path, changes):
         with open (json_file_path, 'r') as fdb:
             jout = json.load(fdb)
             print(f"Json db content on exit: \n{jout}")
+            fdb.close()
             
     except FileNotFoundError:
         # If the file doesn't exist, handle error
