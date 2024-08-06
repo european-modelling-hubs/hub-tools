@@ -18,15 +18,18 @@ parser.add_argument("--url", help="url to data",
                     default="https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/ILIARIRates.csv")
 parser.add_argument("--pathogen", help="pathogen name", default="SARS-CoV-2")
 parser.add_argument("--path_to_save", help="save path")
+parser.add_argument('--hub_path')
 
 args = parser.parse_args()
 indicator = str(args.indicator)
 URL = str(args.url)
 pathogen = str(args.pathogen)
+hub_path = str(args.hub_path)
 path_to_save = str(args.path_to_save)
 
 # import iso2 codes
-iso_df = pd.read_csv("../../supporting-files/locations_iso2_codes.csv")
+iso2_file = os.path.join(hub_path, f"supporting-files/locations_iso2_codes.csv")
+iso_df = pd.read_csv(iso2_file)
 
 # import erviss data
 df = pd.read_csv(URL)
