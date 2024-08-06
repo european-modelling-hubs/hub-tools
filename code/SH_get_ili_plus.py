@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np
+import argparse 
 from datetime import datetime, timedelta
 
 def compute_positivity(grp): 
@@ -20,11 +21,22 @@ def get_sunday_of_week(year_week):
     sunday = first_day + timedelta(days=days_to_sunday)
     return sunday
 
+# parse input arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--hub_path', default="./repo")
+parser.add_argument("--path_to_save", default="target-data/influenza", help="save path")
+
+args = parser.parse_args()
+hub_path = str(args.hub_path)
+save_path =  str(args.path_to_save)
+
+
 # countries that reported less than 50% sentinel points in 2023/2024
 non_sentinel_countries = ['Malta', 'Iceland', 'Croatia', 'Romania', 'Latvia', 'Finland']
 
 # import iso codes
-iso_df = pd.read_csv("../../supporting-files/locations_iso2_codes.csv")
+iso2_file = os.path.join(hub_path, f"supporting-files/locations_iso2_codes.csv")
+iso_df = pd.read_csv(iso2_file)
 iso_df.sort_values(by="location_name", inplace=True, ignore_index=True)
 
 # import ILI data 
@@ -73,4 +85,4 @@ df_final_non_sentinel.rename(columns={"value_adjusted_non_sentinel": "value"}, i
 df_final_non_sentinel["source"] = "non_sentinel"
 
 df_final = pd.concat([df_final_sentinel, df_final_non_sentinel], ignore_index=True)
-df_final.to_csv("ili_plus.csv", index=False)
+df_final.to_csv(os.path.join(hub_path, save_path , "ili_plus.csv"), index=False)
