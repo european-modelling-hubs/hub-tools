@@ -155,8 +155,10 @@ if __name__ == "__main__":
     config_file = str(args.configfile)
 
     for input_elem in input_list:
+        print(f'Validating input: {input_elem}')
         if input_elem.startswith('model-output'):
-            errors = check_task_ids(src_file = input_file, in_tasks = tasks_list, config_file = config_file)
+            print('Validating model-output file')
+            errors = check_task_ids(src_file = input_elem, in_tasks = tasks_list, config_file = config_file)
             if errors:
                 print(f'Errors found, validation failed. Details: {errors}')
                 exit (1)
