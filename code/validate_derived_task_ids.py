@@ -130,7 +130,7 @@ def check_task_ids (src_file: str, in_tasks: list[str], config_file: str) -> lis
         if result is not True:
             # print(f"Group {group}: Missing combinations - {result}")
             # print(f"Missing combinations for group {group}")
-            error_list.append('Missing some combinations')
+            error_list.append(f"Group {group}: Missing combinations - {result}")
 
 
     return error_list
