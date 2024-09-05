@@ -8,8 +8,6 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configfile', default='hub-config/tasks.json')
 parser.add_argument('-i', '--input', default = '')
-# parser.add_argument('-c', '--configfile', default='hub_config/tasks.json')
-# parser.add_argument('-i', '--input')
 parser.add_argument('-t', '--taskids', default='target_end_date pop_group')
 
 args = parser.parse_args()
