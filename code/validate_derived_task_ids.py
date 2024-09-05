@@ -1,12 +1,13 @@
+import os
+import json
+import argparse
 import pandas as pd
 from itertools import product
 from pathlib import Path
-import json
-import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--configfile', default='/Users/paolomilano/Develop/GitHub/european-modelling-hubs/production/RespiCompass/hub-config/tasks.json')
-parser.add_argument('-i', '--input', default = '/Users/paolomilano/Develop/GitHub/european-modelling-hubs/production/RespiCompass/model-output/ECDC-CM_TWO/2024_2025_1_COVID-ECDC-CM_TWO.parquet')
+parser.add_argument('-c', '--configfile', default='hub-config/tasks.json')
+parser.add_argument('-i', '--input', default = '')
 # parser.add_argument('-c', '--configfile', default='hub_config/tasks.json')
 # parser.add_argument('-i', '--input')
 parser.add_argument('-t', '--taskids', default='target_end_date pop_group')
@@ -140,18 +141,27 @@ def check_task_ids (src_file: str, in_tasks: list[str], config_file: str) -> lis
 
 
 
-
-
 if __name__ == "__main__":
+
+    input_list = []
+
+    input_file = str(args.input)
+
+    if input_file:
+        input_list.append(input_file)
+    else:
+        input_list = os.getenv("input_list").split(' ')
+    
 
     tasks_list = args.taskids.split()
     config_file = str(args.configfile)
-    input_file = str(args.input)
 
-    errors = check_task_ids(src_file = input_file, in_tasks = tasks_list, config_file = config_file)
-    if errors:
-        print(f'Errors found, validation failed. Details: {errors}')
-        exit (1)
+    for input_elem in input_list:
+        if input_elem.startswith('model-output'):
+            errors = check_task_ids(src_file = input_file, in_tasks = tasks_list, config_file = config_file)
+            if errors:
+                print(f'Errors found, validation failed. Details: {errors}')
+                exit (1)
 
 
     print ('Validation completed successfully!')
