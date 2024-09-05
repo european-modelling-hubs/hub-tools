@@ -7,7 +7,7 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--configfile', default='hub-config/tasks.json')
-parser.add_argument('-i', '--input', default = '')
+# parser.add_argument('-i', '--input', default = '')
 parser.add_argument('-t', '--taskids', default='target_end_date pop_group')
 
 args = parser.parse_args()
@@ -141,14 +141,14 @@ def check_task_ids (src_file: str, in_tasks: list[str], config_file: str) -> lis
 
 if __name__ == "__main__":
 
-    input_list = []
+    # input_list = []
 
-    input_file = str(args.input)
+    # input_file = str(args.input)
 
-    if input_file:
-        input_list.append(input_file)
-    else:
-        input_list = os.getenv("input_list").split(' ')
+    # if input_file:
+    #     input_list.append(input_file)
+    # else:
+    input_list = os.getenv("input_list").split(' ')
     
 
     tasks_list = args.taskids.split()
