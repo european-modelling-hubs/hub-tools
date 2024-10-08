@@ -54,9 +54,7 @@ csv_reader = csv.DictReader(lines, delimiter=',')
 
 for row in csv_reader:
     row_indicator = row['indicator'][:3]
-
-    print (f'Row Indicator: {row_indicator}')
-
+    
     if (row['survtype'] != 'primary care syndromic'
             or row_indicator not in diseases_list
             or row['age'] != 'total'
