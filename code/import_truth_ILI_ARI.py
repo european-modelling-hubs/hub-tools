@@ -24,7 +24,7 @@ def get_snapshot_date() -> str:
 # Config
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--hub_path', '')
+parser.add_argument('--hub_path')
 
 args = parser.parse_args()
 
