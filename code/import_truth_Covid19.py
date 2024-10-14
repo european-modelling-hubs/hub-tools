@@ -37,7 +37,7 @@ disease_name=str(args.disease_name)
 snapshot_date = get_snapshot_date()
 
 # import iso2 codes
-iso_df = pd.read_csv("../../supporting-files/locations_iso2_codes.csv")
+iso_df = pd.read_csv(os.path.join(args.hub_path, "supporting-files/locations_iso2_codes.csv"))
 
 # import erviss data
 url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_nonSentinelSeverity.csv'
