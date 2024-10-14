@@ -41,6 +41,7 @@ iso_df = pd.read_csv(os.path.join(args.hub_path, "supporting-files/locations_iso
 
 # import erviss data
 url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_nonSentinelSeverity.csv'
+print (f'Data source: {url}')
 df = pd.read_csv(url)
 
 # filter data by pathogen
