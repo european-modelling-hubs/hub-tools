@@ -48,12 +48,15 @@ df = pd.read_csv(url)
 # filter data by pathogen
 df = df.loc[df.pathogen == pathogen]
 
-# drop unneeded 
-df.drop(columns=["survtype", "pathogen", "pathogentype", "age"], inplace = True)
-
 # format and add info on date, country
-df.rename(columns={"countryname": "location_name"}, inplace=True)
-df = df.merge(iso_df, on="location_name", how="left")
+df = df.merge(iso_df, on="countryname", how="left")
+
+# drop unneeded 
+df.drop(columns=["survtype", "countryname", "pathogen", "pathogentype", "age"], inplace = True)
+
+# rename iso2_code to l
+df.rename(columns={"iso2_code": "location"}, inplace=True)
+
 
 
 # -------------------
@@ -63,7 +66,7 @@ df["truth_date"] = df.yearweek.apply(get_sunday_of_week)
 
 
 df = df.loc[df.indicator == indicator].reset_index(drop=True)
-df = df[["location_name", "iso2_code", "yearweek", "truth_date", "value"]]
+df = df[["location", "truth_date", "yearweek", "value"]]
 
 
 # save 
