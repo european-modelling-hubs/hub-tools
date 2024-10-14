@@ -47,6 +47,9 @@ df = pd.read_csv(url)
 
 # filter data by pathogen
 df = df.loc[df.pathogen == pathogen]
+# get only age total
+df = df.loc[df.age == 'total']
+
 
 # format and add info on date, country
 df.rename(columns={"countryname": "location_name"}, inplace=True)
@@ -60,10 +63,8 @@ df.rename(columns={"iso2_code": "location"}, inplace=True)
 
 
 
-# -------------------
-# Verifica che sia NECESSARIO CON NICOLÒ!
+# Add truth date column
 df["truth_date"] = df.yearweek.apply(get_sunday_of_week)
-# -------------------
 
 
 df = df.loc[df.indicator == indicator].reset_index(drop=True)
