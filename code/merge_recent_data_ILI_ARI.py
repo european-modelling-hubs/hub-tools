@@ -90,7 +90,7 @@ file_names = []
 
 repo_disease_name = os.getenv("disease_name")
 if repo_disease_name == "Syndromic_indicator":
-    file_names = ["latest-ILI_incidence.csv", "latest-ILI_incidence.csv"]
+    file_names = ["latest-ILI_incidence.csv", "latest-ARI_incidence.csv"]
 elif repo_disease_name == "COVID-19":
     file_names = ["latest-COVID19_cases.csv"]
 else:
