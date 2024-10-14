@@ -49,10 +49,11 @@ df = pd.read_csv(url)
 df = df.loc[df.pathogen == pathogen]
 
 # format and add info on date, country
-df = df.merge(iso_df, on="countryname", how="left")
+df.rename(columns={"countryname": "location_name"}, inplace=True)
+df = df.merge(iso_df, on="location_name", how="left")
 
 # drop unneeded 
-df.drop(columns=["survtype", "countryname", "pathogen", "pathogentype", "age"], inplace = True)
+df.drop(columns=["survtype", "location_name", "pathogen", "pathogentype", "age"], inplace = True)
 
 # rename iso2_code to l
 df.rename(columns={"iso2_code": "location"}, inplace=True)
