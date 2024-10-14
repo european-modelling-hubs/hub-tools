@@ -114,8 +114,10 @@ for disease in diseases:
 
     # check that the df_final contains new data
     max_date_new = df_final.year_week.max()
-    df_old = pd.read_csv(os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv"))
-    max_date_old = df_old.year_week.max()
+
+    # get latest imported date
+    latest_import_file = os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv")
+    max_date_old = pd.read_csv(latest_import_file).year_week.max() if os.path.exists(latest_import_file) else parse_week(weekmin)
 
     if max_date_new != max_date_old:
         # save
