@@ -18,6 +18,7 @@ def storeMultiTargetData(target_data):
     if out_data:
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/target_db.json")
         print(f"DB path: {db_path}")
+        print (f'Out-data: {out_data}')
         # updateMultiTargetJson(db_path, out_data)
  
 
