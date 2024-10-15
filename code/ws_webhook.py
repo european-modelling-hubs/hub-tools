@@ -138,7 +138,7 @@ def run ():
     
     wh_secret = os.getenv("webhook_secret")
 
-    print (f'>>>> DEBUG <<<<< Data: {json_data}, \nDisease: {disease_name}')
+    print (f'>>>> DEBUG <<<<< \nData: {json_data}, \nDisease: {disease_name}')
         
     jdata = json.loads(json_data)
     
