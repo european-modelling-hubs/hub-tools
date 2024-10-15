@@ -101,6 +101,8 @@ print("Max Week:", df_fluid.ISOYW.max())
 # add iso 2
 df_fluid["location"] = df_fluid["COUNTRY_CODE"].apply(iso3_to_iso2)
 
+# keep a list of imported file to be returned to the caller ()
+imported = []
 
 for disease in diseases:
     print (f"updating {disease}")
@@ -122,15 +124,21 @@ for disease in diseases:
     if max_date_new != max_date_old:
         # save
         df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv"), index=False)
+        
         snapshot_filename = closest_friday().strftime("%Y-%m-%d") + f"-{disease}_incidence.csv"
-        df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/snapshots/{snapshot_filename}"), index=False)
+        out_snapshot_file = "target-data/FluID/snapshots/{snapshot_filename}"
+        out_snapshot_file.format(snapshot_filename = snapshot_filename)
 
-        print(f"Updating: {snapshot_filename}")
+        df_final.to_csv(os.path.join(args.hub_path, out_snapshot_file), index=False)
 
-        env_file = os.getenv('GITHUB_OUTPUT')
-        with open(env_file, "a") as outenv:
-            outenv.write (f"imported_snapshot=target-data/FluID/snapshots/{snapshot_filename}")
+        imported.append(out_snapshot_file)
+
     else:
         print(f"Nothing to update: new: {max_date_new}, old: {max_date_old}")
+
+
+env_file = os.getenv('GITHUB_OUTPUT')
+with open(env_file, "a") as outenv:
+    outenv.write (f"imported_snapshot={' '.join(imported)}")
 
 print(f'Updates completed')
