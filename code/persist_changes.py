@@ -2,6 +2,56 @@ import os
 import json
 
 
+def storeMultiTargetData(target_data):
+    
+    out_data = {}
+
+    for target in target_data:
+        
+        target_name = os.path.splitext(os.path.basename(target))[0].split('-')[-1]
+
+        if target_name in out_data:                        
+            out_data[target_name]['changes'] = list(set(out_data[target_name]['changes'] + target))
+        else:
+            out_data[target_name] = [target]
+
+    if out_data:
+        db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/target_db.json")
+        print(f"DB path: {db_path}")
+        # updateMultiTargetJson(db_path, out_data)
+ 
+
+
+def updateMultiTargetJson (json_file_path, out_data):
+
+    json_data = None
+
+    # Step 1: Read the existing data from the JSON file
+    try:
+        with open (json_file_path, 'r') as fdb:
+            json_data = json.load(fdb)            
+    except FileNotFoundError:
+        # If the file doesn't exist, handle error
+        raise Exception(f"Json file not found {json_file_path}\n")
+
+
+    for target in out_data:
+
+        if target not in json_data:
+            json_data[target] = out_data[target]
+        else:
+            json_data[target]['changes'] = list(set(json_data[target]['changes'] + out_data[target]['changes']))
+        
+    try:
+        with open(json_file_path, 'w') as fdb:
+            json.dump(json_data, fdb, indent=4)
+    except:
+        # If the file doesn't exist, handle error
+        raise Exception(f"Error writing  {json_data} \n to json file: {json_file_path}\n")    
+
+
+
+
 
 def storeTargetData (target_data):
     # get the target name from path 
@@ -198,7 +248,8 @@ def store(to_store):
 
     if targetdata_changes:
         print (f"{len(targetdata_changes)} changes in targetdata")
-        storeTargetData(targetdata_changes)
+        # storeTargetData(targetdata_changes)
+        storeMultiTargetData(targetdata_changes)
 
     if evaluation_changes:
         print (f"{len(evaluation_changes)} changes in targetdata")
