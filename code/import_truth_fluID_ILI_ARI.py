@@ -126,8 +126,13 @@ for disease in diseases:
         df_final.to_csv(os.path.join(args.hub_path, f"target-data/FluID/latest-{disease}_incidence.csv"), index=False)
         
         snapshot_filename = closest_friday().strftime("%Y-%m-%d") + f"-{disease}_incidence.csv"
-        out_snapshot_file = "target-data/FluID/snapshots/{snapshot_filename}"
-        out_snapshot_file.format(snapshot_filename = snapshot_filename)
+
+        print(f'Snapshot file name: {snapshot_filename}')
+
+        out_snapshot_file = "target-data/FluID/snapshots/{snap_file}"        
+        out_snapshot_file.format(snap_file = snapshot_filename)
+
+        print (f'Output file name: {out_snapshot_file}')
 
         df_final.to_csv(os.path.join(args.hub_path, out_snapshot_file), index=False)
 
@@ -136,6 +141,8 @@ for disease in diseases:
     else:
         print(f"Nothing to update: new: {max_date_new}, old: {max_date_old}")
 
+
+print (f'Imported list: {imported}')
 
 env_file = os.getenv('GITHUB_OUTPUT')
 with open(env_file, "a") as outenv:
