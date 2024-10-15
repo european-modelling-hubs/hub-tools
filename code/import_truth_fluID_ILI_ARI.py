@@ -129,8 +129,7 @@ for disease in diseases:
 
         print(f'Snapshot file name: {snapshot_filename}')
 
-        out_snapshot_file = "target-data/FluID/snapshots/{snap_file}"        
-        out_snapshot_file.format(snap_file = snapshot_filename)
+        out_snapshot_file = f"target-data/FluID/snapshots/{snapshot_filename}"        
 
         print (f'Output file name: {out_snapshot_file}')
 
