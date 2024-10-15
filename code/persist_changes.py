@@ -10,16 +10,27 @@ def storeMultiTargetData(target_data):
         
         target_name = os.path.splitext(os.path.basename(target))[0].split('-')[-1]
 
-        if target_name in out_data:                        
-            out_data[target_name]['changes'] = list(set(out_data[target_name]['changes'] + target))
-        else:
-            out_data[target_name] = [target]
+        print (f'OutputData Before: {out_data}')
+
+        # Look for target in out_data
+        if target_name in out_data:  
+
+            # if already present, just add changes                      
+
+            print(f'Target {target_name} already in the list. Add data')
+
+            out_data[target_name]["changes"] = list(set(out_data[target_name]["changes"] + target))
+        
+        else:        
+            # if not in the list, just add changes                      
+            print(f'New target {target_name}. Adding data')        
+            out_data[target_name] = { "changes" : [target] }
 
     if out_data:
         db_path = os.path.join(os.getcwd(), "./repo/.github/data-storage/target_db.json")
         print(f"DB path: {db_path}")
         print (f'Out-data: {out_data}')
-        # updateMultiTargetJson(db_path, out_data)
+        updateMultiTargetJson(db_path, out_data)
  
 
 
