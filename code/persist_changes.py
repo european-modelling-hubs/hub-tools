@@ -8,7 +8,7 @@ def storeMultiTargetData(target_data):
 
     for target in target_data:
         
-        target_name = os.path.splitext(os.path.basename(target))[0].split('-')[-1]
+        target_name = os.path.splitext(os.path.basename(target))[0].split('-')[-1].replace("_", " ")
 
         print (f'OutputData Before: {out_data}')
 
