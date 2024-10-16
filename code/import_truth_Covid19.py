@@ -70,10 +70,12 @@ df["truth_date"] = df.yearweek.apply(get_sunday_of_week)
 df = df.loc[df.indicator == indicator].reset_index(drop=True)
 df = df[["location", "truth_date", "yearweek", "value"]]
 
+# add extra column for target
+df.insert(0, 'target', 'hospital admissions')    
 
 # save 
 # Write output files
-out_files_target = ['target-data/ERVISS/latest-{disease_name}_cases.csv', 'target-data/ERVISS/snapshots/{report_date}-{disease_name}_cases.csv']
+out_files_target = ['target-data/ERVISS/latest-hospital_admissions.csv', 'target-data/ERVISS/snapshots/{report_date}-hospital_admissions.csv']
 out_files_target = [of.format(report_date=snapshot_date, disease_name=disease_name) for of in out_files_target]
 
 for output_path in out_files_target:
