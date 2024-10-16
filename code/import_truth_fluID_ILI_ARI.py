@@ -114,6 +114,9 @@ for disease in diseases:
         df_country = get_location_data(df_fluid, country, weekmin, disease, age_grp = "All")
         df_final = pd.concat((df_final, df_country), ignore_index=True)
 
+    # add extra column for target
+    df_final.insert(0, 'target', disease + ' incidence')    
+
     # check that the df_final contains new data
     max_date_new = df_final.year_week.max()
 
