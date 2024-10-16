@@ -30,7 +30,7 @@ args = parser.parse_args()
 
 hub_path            = str(args.hub_path)
 diseases_list       = ["ILI", "ARI"]
-target_records_list = [[('location', 'truth_date', 'year_week', 'value')] for _ in range(len(diseases_list))]
+target_records_list = [[('target', 'location', 'truth_date', 'year_week', 'value')] for _ in range(len(diseases_list))]
 countries_to_x1000  = ('Malta', 'Luxembourg', 'Cyprus') # Values for this countries must be multiplied by 1000
 snapshot_date       = get_snapshot_date()
 
@@ -61,6 +61,7 @@ for row in csv_reader:
        ):
         continue
 
+    target = row_indicator + ' incidence'
     country2 = pycountry.countries.lookup(row['countryname']).alpha_2
     year, week = map(int, row['yearweek'].split('-W'))
     week_obj = Week(year, week)
@@ -69,7 +70,7 @@ for row in csv_reader:
     if row['countryname'] in countries_to_x1000:
         value = value*1000
 
-    record = (country2, truth_date, row['yearweek'], value)
+    record = (target, country2, truth_date, row['yearweek'], value)
     target_records_list[diseases_list.index(row_indicator)].append(record)
 
 imported = []
