@@ -60,7 +60,7 @@ df = df.merge(iso_df, on="location_name", how="left")
 df.drop(columns=["survtype", "location_name", "pathogen", "pathogentype", "age"], inplace = True)
 
 # drop rows with empty location
-df['iso2_code'].replace('', np.nan, inplace=True)
+df['iso2_code'] = df['iso2_code'].replace('', np.nan)
 df.dropna(subset=['iso2_code'], inplace=True)
 
 # rename iso2_code to location
