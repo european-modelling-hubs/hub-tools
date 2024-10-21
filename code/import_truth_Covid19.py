@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import argparse 
 import os
+import numpy as np
 
 def get_sunday_of_week(year_week):
     # Create a datetime object for the first day of the week
@@ -58,7 +59,11 @@ df = df.merge(iso_df, on="location_name", how="left")
 # drop unneeded 
 df.drop(columns=["survtype", "location_name", "pathogen", "pathogentype", "age"], inplace = True)
 
-# rename iso2_code to l
+# drop rows with empty location
+df['iso2_code'].replace('', np.nan, inplace=True)
+df.dropna(subset=['iso2_code'], inplace=True)
+
+# rename iso2_code to location
 df.rename(columns={"iso2_code": "location"}, inplace=True)
 
 
