@@ -60,6 +60,8 @@ def handleResponseOk(j_response):
     return res
 
 def handleServerError():
+    print('Handle server error')
+    
     res = {}
     res["status"] = "error"
     res["message"] = "Server Error"
@@ -117,6 +119,8 @@ def handleResponseError(http_code, j_response):
 def handleResponse (response):
 
     http_code = response.status_code
+
+    print (f'Response: {response}')
 
     if not response.headers["content-type"].strip().startswith("application/json"):
         return handleServerError()
