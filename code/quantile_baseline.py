@@ -192,10 +192,13 @@ target_data_combo = pd.DataFrame()
 origin_date_combo = ''
 
 for target in targets:
+    print (f'### Target: {target}')
+    
     # import target data from all sources
     target_data = pd.DataFrame()
 
     for source in data_sources:
+        print (f'### Source: {source}')
         file_path = os.path.join(args.hub_path, f"target-data/{source}/latest-{target}.csv")
         if os.path.exists(file_path):
             target_source = pd.read_csv(file_path)
@@ -217,7 +220,7 @@ for target in targets:
 
 model_id = f"{str(args.team_abbr)}-{str(args.model_abbr)}"
 file_name = f"{origin_date_combo}-{model_id}.csv"
-quantile_baseline_forecasts.to_csv(os.path.join(args.hub_path, f"model-output/{model_id}/{file_name}"), index=False)
+target_data_combo.to_csv(os.path.join(args.hub_path, f"model-output/{model_id}/{file_name}"), index=False)
 
 env_file = os.getenv('GITHUB_OUTPUT')
 with open(env_file, "a") as outenv:
