@@ -9,16 +9,17 @@ data_sources = ["ERVISS", "FluID"]
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hub_path')
-parser.add_argument('--target_name')
-parser.add_argument('--filename')
+parser.add_argument('--targets', default= 'ILI_incidence ARI_incidence')
 parser.add_argument('--symmetrize', default=True)
 parser.add_argument('--nsamples', default=10000)
 parser.add_argument('--horizon', default=4)
-parser.add_argument('--team_abbr', default="respicast")
+parser.add_argument('--team_abbr', default="respicastSyndromic")
 parser.add_argument('--model_abbr', default="quantileBaseline")
 parser.add_argument('--submission_end_weekday', default=2)
 
 args = parser.parse_args()
+
+targets = args.targets.split(' ')
 
 
 def import_forecasting_weeks(path): 
@@ -187,25 +188,35 @@ def generate_baseline_forecast_fullpipeline(truth_data,
 # import forecasting weeks
 forecasting_weeks = import_forecasting_weeks(args.hub_path)
 
-# import target data from all sources
-target_data = pd.DataFrame()
-for source in data_sources:
-    if os.path.exists(os.path.join(args.hub_path, f"target-data/{source}/latest-{args.filename}.csv")):
-        target_source = pd.read_csv(os.path.join(args.hub_path, f"target-data/{source}/latest-{args.filename}.csv"))
-        target_data = pd.concat((target_data, target_source), ignore_index=True)
+target_data_combo = pd.DataFrame()
+origin_date_combo = ''
 
-# cut historical data
-target_data = target_data.loc[target_data.year_week >= "2023-W42"].reset_index(drop=True)
+for target in targets:
+    # import target data from all sources
+    target_data = pd.DataFrame()
 
-quantile_baseline_forecasts, origin_date = generate_baseline_forecast_fullpipeline(target_data, 
-                                                                      target_name=str(args.target_name), 
+    for source in data_sources:
+        file_path = os.path.join(args.hub_path, f"target-data/{source}/latest-{target}.csv")
+        if os.path.exists(file_path):
+            target_source = pd.read_csv(file_path)
+            target_data = pd.concat((target_data, target_source), ignore_index=True)
+
+
+    # cut historical data
+    target_data = target_data.loc[target_data.year_week >= "2023-W42"].reset_index(drop=True)
+
+    quantile_baseline_forecasts, origin_date = generate_baseline_forecast_fullpipeline(target_data, 
+                                                                      target_name=target.replace("_", " "), 
                                                                       nsamples=int(args.nsamples),
                                                                       horizon=int(args.horizon),
                                                                       symmetrize=bool(args.symmetrize), 
                                                                       forecasting_weeks=forecasting_weeks)
+    
+    target_data_combo = pd.concat((target_data_combo, quantile_baseline_forecasts))
+    origin_date_combo = origin_date
 
 model_id = f"{str(args.team_abbr)}-{str(args.model_abbr)}"
-file_name = f"{origin_date}-{model_id}.csv"
+file_name = f"{origin_date_combo}-{model_id}.csv"
 quantile_baseline_forecasts.to_csv(os.path.join(args.hub_path, f"model-output/{model_id}/{file_name}"), index=False)
 
 env_file = os.getenv('GITHUB_OUTPUT')
