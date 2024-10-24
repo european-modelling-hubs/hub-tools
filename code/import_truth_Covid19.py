@@ -73,7 +73,7 @@ df["truth_date"] = df.yearweek.apply(get_sunday_of_week)
 
 
 df = df.loc[df.indicator == indicator].reset_index(drop=True)
-df = df[["location", "truth_date", "yearweek", "value"]]
+df = df[["location", "truth_date", "year_week", "value"]]
 
 # add extra column for target
 df.insert(0, 'target', 'hospital admissions')    
