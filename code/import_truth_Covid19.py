@@ -68,9 +68,8 @@ df.rename(columns={"iso2_code": "location"}, inplace=True)
 df.rename(columns={"yearweek": "year_week"}, inplace=True)
 
 
-
 # Add truth date column
-df["truth_date"] = df.yearweek.apply(get_sunday_of_week)
+df["truth_date"] = df.year_week.apply(get_sunday_of_week)
 
 
 df = df.loc[df.indicator == indicator].reset_index(drop=True)
