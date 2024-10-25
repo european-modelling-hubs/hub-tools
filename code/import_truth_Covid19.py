@@ -63,8 +63,9 @@ df.drop(columns=["survtype", "location_name", "pathogen", "pathogentype", "age"]
 df['iso2_code'] = df['iso2_code'].replace('', np.nan)
 df.dropna(subset=['iso2_code'], inplace=True)
 
-# rename iso2_code to location
+# rename iso2_code to location and yearweek to year_week
 df.rename(columns={"iso2_code": "location"}, inplace=True)
+df.rename(columns={"yearweek": "year_week"}, inplace=True)
 
 
 
