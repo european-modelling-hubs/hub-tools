@@ -89,12 +89,14 @@ def do_the_merge (repo, root_folder, merge_list, file_name):
 file_names = []
 
 repo_disease_name = os.getenv("disease_name")
+
 if repo_disease_name == "Syndromic_indicator":
     file_names = ["latest-ILI_incidence.csv", "latest-ARI_incidence.csv"]
 elif repo_disease_name == "COVID-19":
-    file_names = ["latest-COVID19_cases.csv"]
+    file_names = ["latest-hospital_admissions.csv"]
 else:
     print (f'Unknow repository disease name for merge: {repo_disease_name}')
+    exit(1)
 
 
 for f_name in file_names:
