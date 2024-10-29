@@ -2,6 +2,7 @@ library(scoringutils)
 library(hubData)
 library("dplyr")
 library("optparse")
+library(data.table)
 
 # arguments 
 # option_list = list(
