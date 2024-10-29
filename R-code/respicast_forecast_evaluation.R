@@ -27,7 +27,7 @@ targets <- unlist(targets_list)
 subfolders_list <- strsplit(opt$subfolders, ",")
 subfolders <- unlist(subfolders_list)
 
-overall_scores = <- data.table()
+overall_scores <- data.table()
 
 # for each target, extract data
 for (target in targets) {
