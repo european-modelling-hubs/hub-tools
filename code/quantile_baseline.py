@@ -13,7 +13,7 @@ parser.add_argument('--targets', default= 'ILI_incidence ARI_incidence')
 parser.add_argument('--symmetrize', default=True)
 parser.add_argument('--nsamples', default=10000)
 parser.add_argument('--horizon', default=4)
-parser.add_argument('--team_abbr', default="respicastSyndromic")
+parser.add_argument('--team_abbr', default="respicast")
 parser.add_argument('--model_abbr', default="quantileBaseline")
 parser.add_argument('--submission_end_weekday', default=2)
 
