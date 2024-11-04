@@ -39,8 +39,6 @@ for (target in targets) {
   
   truth_data <- data.frame()
   for (subfolder in subfolders) {
-      print(paste('### --- Reading subfile', paste0(opt$hub_path, "/target-data/", subfolder, "/", truth_file_name)))
-
       truth_data_temp <- read.csv(paste0(opt$hub_path, "/target-data/", subfolder, "/", truth_file_name), header = TRUE)
       truth_data <- rbind(truth_data, truth_data_temp)
   }
@@ -70,9 +68,8 @@ for (target in targets) {
                 "prediction" = "value",
                 "model" = "model_id")
 
-
   # join model output and truth (left join)
-  full_data <- merge(model_outputs, truth_data, by = c("target_end_date", "location"), all.x = TRUE)
+  full_data <- merge(model_outputs, truth_data, by = c("target", "target_end_date", "location"), all.x = TRUE)
 
   # remove rows related to median and where true data is null
   full_data <- full_data[full_data$output_type != "median", ]
