@@ -39,10 +39,11 @@ for (target in targets) {
   
   truth_data <- data.frame()
   for (subfolder in subfolders) {
+      print(paste('### --- Reading subfile', paste0(opt$hub_path, "/target-data/", subfolder, "/", truth_file_name)))
+
       truth_data_temp <- read.csv(paste0(opt$hub_path, "/target-data/", subfolder, "/", truth_file_name), header = TRUE)
       truth_data <- rbind(truth_data, truth_data_temp)
   }
-
 
   # rename truth_date column to target_end_date and value column to true_value
   truth_data <- truth_data %>% 
@@ -55,16 +56,20 @@ for (target in targets) {
   # and convert target_end_date to Date format,  "%Y-%m-%d"
   truth_data$target_end_date <- as.Date(truth_data$target_end_date, format = "%Y-%m-%d")
 
-
   # connect to hub
   model_outputs <- hubData::connect_hub(hub_path = opt$hub_path) %>%
     dplyr::collect()
 
+  # drop rows not relating to current target
+  curr_target <- gsub("_", " ", target)
+  model_outputs <- model_outputs[model_outputs$target %in% curr_target,]
+  
   # rename model output columns 
   model_outputs <- model_outputs %>% 
           rename("quantile" = "output_type_id",
                 "prediction" = "value",
                 "model" = "model_id")
+
 
   # join model output and truth (left join)
   full_data <- merge(model_outputs, truth_data, by = c("target_end_date", "location"), all.x = TRUE)
