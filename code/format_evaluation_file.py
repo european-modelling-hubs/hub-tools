@@ -52,6 +52,7 @@ df_scores = df_scores.loc[df_scores.value_relative.notnull()].reset_index(drop=T
 
 # fix inf values 
 df_scores.loc[df_scores.value_relative == np.inf, "value_relative"] = 10.
+df_scores.loc[df_scores.value_relative == -np.inf, "value_relative"] = -10.
 
 # compute number of models 
 df_nmodels = df_scores.groupby(by=["origin_date", "target", "target_end_date", "horizon", "location", "metric"], as_index=False).model_id.nunique()
@@ -76,7 +77,11 @@ for index, row in forecast_rounds.iterrows():
     
     max_value_rel, min_value_rel = np.max(temp_df["value_absolute"]), np.min(temp_df["value_absolute"])
     if len(temp_df) > 1: 
-        df_scores.loc[temp_df.index, 'rank_score']  = temp_df["value_absolute"].apply(lambda x : (max_value_rel - x) / (max_value_rel - min_value_rel))
+        if max_value_rel != min_value_rel:
+            df_scores.loc[temp_df.index, 'rank_score']  = temp_df["value_absolute"].apply(lambda x : (max_value_rel - x) / (max_value_rel - min_value_rel))
+        else:
+            df_scores.loc[temp_df.index, 'rank_score'] = 1.
+        #df_scores.loc[temp_df.index, 'rank_score']  = temp_df["value_absolute"].apply(lambda x : (max_value_rel - x) / (max_value_rel - min_value_rel))
 
 # save 
 max_origin_date = df_scores.origin_date.max()
