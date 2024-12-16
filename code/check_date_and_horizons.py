@@ -45,6 +45,8 @@ args = parser.parse_args()
 hub_path = str(args.hub_path)
 forecasting_file = str(args.forecasting_file)
 
+print(f'HubPath: {hub_path}\nForecasting weeks file: {forecasting_file}')
+
 # get list of model-output files from environment
 input_list = os.getenv("pr_changes", "").split(' ')
 
