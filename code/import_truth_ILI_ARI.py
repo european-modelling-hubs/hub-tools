@@ -35,8 +35,7 @@ countries_to_x1000  = ('Malta', 'Luxembourg', 'Cyprus') # Values for this countr
 snapshot_date       = get_snapshot_date()
 
 # Build URL
-# url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_ILIARIRates.csv'
-url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/ILIARIRates.csv'
+url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_ILIARIRates.csv'
 url = url.format(snapshot_date = snapshot_date)
 
 # Read data from URL
