@@ -85,7 +85,9 @@ def get_location_data(df_fluid, location, weekmin, disease, age_grp = "All"):
     df_fluid_location.sort_values(by="ISOYW", ignore_index=True, inplace=True)
 
     # compute incidence 
+    df_fluid_location = df_fluid_location.loc[df_fluid_location.POP_COV > 0]
     df_fluid_location["value"] = df_fluid_location["REPORTED_CASES"] / df_fluid_location["POP_COV"] * 100000
+    df_fluid_location = df_fluid_location.loc[df_fluid_location["value"].notnull()]
 
     # format 
     df_fluid_location["truth_date"] = pd.to_datetime(df_fluid_location["ISO_WEEKSTARTDATE"]) + timedelta(days=6)
