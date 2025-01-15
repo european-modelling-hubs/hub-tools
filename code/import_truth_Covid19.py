@@ -20,6 +20,9 @@ def get_sunday_of_week(year_week):
     year, week = map(int, year_week.split('-W'))
     week_obj = Week(year, week)
     sunday = week_obj.sunday().isoformat()
+
+    print(f"In -> {year_week}, out -> {sunday}")
+    
     return sunday
 
 
