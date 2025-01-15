@@ -1,16 +1,25 @@
 import pandas as pd 
 from datetime import datetime, timedelta
+from isoweek import Week
 import argparse 
 import os
 import numpy as np
 
+# def get_sunday_of_week(year_week):
+#     # Create a datetime object for the first day of the week
+#     first_day = datetime.strptime(f'{year_week}-1', "%Y-W%W-%w")
+#     # Calculate the number of days to Sunday (6 represents Sunday)
+#     days_to_sunday = (6 - first_day.weekday()) % 7
+#     # Add the number of days to get the Sunday of that week
+#     sunday = first_day + timedelta(days=days_to_sunday)
+#     return sunday
+
+
 def get_sunday_of_week(year_week):
-    # Create a datetime object for the first day of the week
-    first_day = datetime.strptime(f'{year_week}-1', "%Y-W%W-%w")
-    # Calculate the number of days to Sunday (6 represents Sunday)
-    days_to_sunday = (6 - first_day.weekday()) % 7
-    # Add the number of days to get the Sunday of that week
-    sunday = first_day + timedelta(days=days_to_sunday)
+    # Create a week object for the given year week
+    year, week = map(int, year_week.split('-W'))
+    week_obj = Week(year, week)
+    sunday = week_obj.sunday().isoformat()
     return sunday
 
 
