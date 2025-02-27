@@ -39,7 +39,7 @@ class Sender () :
 
   def send (self, payload, secret):
     # send POST request 
-    r = requests.post(self.webhook_url, data=payload, auth=BodyDigestSignature(secret), timeout=(10, 410))
+    r = requests.post(self.webhook_url, data=payload, auth=BodyDigestSignature(secret), timeout=(10, 590))
 
     return r
 
