@@ -143,7 +143,8 @@ def run ():
     wh_secret = os.getenv("webhook_secret")
 
     print (f'>>>> DEBUG <<<<< \nData: {json_data}, \nDisease: {disease_name}')
-        
+
+    json_data = json_data.replace("\'", "")
     jdata = json.loads(json_data)
     
     if wh_url is None or wh_secret is None or not jdata:
