@@ -137,6 +137,9 @@ def post_files(changes, whurl, whsecret, disease_name):
     jpayload = {}
     jpayload["disease"] = disease_name
 
+    # order input 
+    changes.sort()
+
     for change in changes:
       
         jpayload["changes"] = [change]
