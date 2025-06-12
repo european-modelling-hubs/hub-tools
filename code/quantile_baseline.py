@@ -165,6 +165,12 @@ def generate_baseline_forecast_fullpipeline(truth_data,
         # sort data
         truth_data_loc = truth_data_loc.sort_values(by="truth_date", ascending=True, ignore_index=True)
 
+        ## PATCH 20250612, revisit
+        if truth_data_loc.shape[0] <= 1:
+            print("Warning: truth data has less than two rows")
+            continue
+        ####
+
         # compute extra steps if truth data is missing
         extra_horizon = int((last_date - datetime.strptime(truth_data_loc.truth_date.max(), "%Y-%m-%d")).days / 7)
         
