@@ -6,13 +6,16 @@ import argparse
 
 from FH_utils import get_latest_origin_dates
 
-def suitable_for_models (repo_path):
+def new_models_number (repo_path):
     db_path = os.path.join(repo_path, '.github/data-storage/changes_db.json')
 
     metadata_folder =  os.path.join(repo_path, 'model-metadata/')
 
     changes = load_changes_db(db_path)
-    return True if count_submitted_models(changes, metadata_folder) >= 3 else False
+    models_count = count_submitted_models(changes, metadata_folder)
+    return models_count
+    
+    # return True if count_submitted_models(changes, metadata_folder) >= 3 else False
 
 
 def suitable_for_ensemble (repo_path):
@@ -105,9 +108,17 @@ if __name__ == "__main__":
 
     hub_path = str(args.hub_path)
 
-    if suitable_for_models(hub_path) or suitable_for_ensemble(hub_path):
+    # ---------
+    new_models = new_models_number(hub_path)
+    
+    if  new_models >= 3 or (new_models > 0 and suitable_for_ensemble(hub_path)):
         print ("sutiable")
         exit(0)
+    # ---------
+    
+    # if new_models_number(hub_path) or suitable_for_ensemble(hub_path):
+    #     print ("sutiable")
+    #     exit(0)
 
     print ("not suitable")
     exit(1)
