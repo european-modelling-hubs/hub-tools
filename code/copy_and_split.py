@@ -94,7 +94,7 @@ def main (hub_path, tmp_dir, json_data):
     for change in changes:
         # compose absolute file name
         fname = os.path.join(hub_path, change)
-        parts_list = copy_and_split_csv (fname, tmp_dir_abs)
+        parts_list = copy_and_split_csv (file_path = fname, temp_dir = tmp_dir_abs, max_records=20000)
         parts_list = extract_paths_from_subfolder(parts_list, tmp_dir.split(os.sep)[0])
         print (parts_list)
         update_json_changes(parts_list, filename= jdb)
