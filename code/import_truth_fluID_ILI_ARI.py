@@ -18,10 +18,10 @@ diseases = ['ILI', 'ARI']
 
 # list of countries with flu_ID data
 fluID_countries = {"ILI": ["CH", "GB-ENG", "GB-WLS", "GB-NIR", "GB-SCT"], 
-                   "ARI": ["GB-ENG", "GB-WLS", "GB-NIR", "GB-SCT"]}
+                   "ARI": ["CH", "GB-ENG", "GB-WLS", "GB-NIR", "GB-SCT"]}
 
 
-def import_fluID(fluid_url = "https://xmart-api-public.who.int/FLUMART/VIW_FID?$format=csv"): 
+def import_fluID(fluid_url = "https://xmart-api-public.who.int/FLUMART/VIW_FID_EPI?$format=csv"): 
     return pd.read_csv(fluid_url)
 
 
@@ -77,16 +77,12 @@ def get_location_data(df_fluid, location, weekmin, disease, age_grp = "All"):
     df_fluid_location = df_fluid_location.loc[df_fluid_location.AGEGROUP_CODE == age_grp]
     
     # select disease
-    df_fluid_location = df_fluid_location.loc[df_fluid_location.CASE_INFO == disease]
-    
-    
-    df_fluid_location = df_fluid_location[["location", "ISOYW", "ISO_WEEKSTARTDATE", "REPORTED_CASES", "POP_COV"]]
-
+    df_fluid_location = df_fluid_location[["location", "ISOYW", "ISO_WEEKSTARTDATE", f"{disease}_CASE", f"{disease}_POP_COV"]]
     df_fluid_location.sort_values(by="ISOYW", ignore_index=True, inplace=True)
 
     # compute incidence 
-    df_fluid_location = df_fluid_location.loc[df_fluid_location.POP_COV > 0]
-    df_fluid_location["value"] = df_fluid_location["REPORTED_CASES"] / df_fluid_location["POP_COV"] * 100000
+    df_fluid_location = df_fluid_location.loc[df_fluid_location[f"{disease}_POP_COV"] > 0]
+    df_fluid_location["value"] = df_fluid_location[f"{disease}_CASE"] / df_fluid_location[f"{disease}_POP_COV"] * 100000
     df_fluid_location = df_fluid_location.loc[df_fluid_location["value"].notnull()]
 
     # format 
