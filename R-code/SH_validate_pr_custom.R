@@ -11,7 +11,7 @@ get_script_path <- function() {
   }
 }
 script_dir <- dirname(get_script_path())
-source(file.path(script_dir, "validate_model_output_chunked.R"))
+source(file.path(script_dir, "SH_validate_model_output_chunked.R"))
 
 
 # source("./validate_model_output_chunked.R")
