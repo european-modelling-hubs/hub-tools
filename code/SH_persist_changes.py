@@ -196,7 +196,7 @@ input: blac
 def store(changes_list):
 
     # Make a list out of the changed files
-    changes = changes_list.split(" ")
+    changes = changes_list.split(",")
 
     # List should not be empty
     if not changes:
