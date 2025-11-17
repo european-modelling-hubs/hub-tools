@@ -35,9 +35,11 @@ validate_model_output_chunked <- function(parquet_path, hub_path, split_column =
   cat("📁 Creating backup dir:", output_dir, "\n")
   cat("📁 Input file:", parquet_path, "\n")
   cat("📁 Input hubpath:", hub_path, "\n")
+  cat("📁 Log file path:", log_file, "\n")
 
   dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
   if (!is.null(log_file) && file.exists(log_file)) file.remove(log_file)
+  
 
   log_append <- function(message) {
     if (!is.null(log_file)) {
@@ -66,7 +68,37 @@ validate_model_output_chunked <- function(parquet_path, hub_path, split_column =
 
     cat("📦 Validating model data...\n")
     res <- hubValidations::validate_model_data(hub_path = hub_path, file_path = parquet_path)
+    # Debug code
+    if ("req_vals" %in% names(res)) {
+      req_vals_result <- res[["req_vals"]]
 
+      if (!is.null(req_vals_result$missing)) {
+        cat("✅ Missing elements:\n")
+        print(head(req_vals_result$missing, 10))
+      } else {
+        cat("❌ `missing` field is empty!\n")
+      }
+    } else {
+      cat("❌ No `req_vals` found in `res`\n")
+    }
+
+
+
+    # ---------------------------------------------
+
+    # tryCatch({
+    #   hubValidations:::check_for_errors(res)
+    # }, error = function(e) {
+    #   cat("⚠️ ❌ INVALID FILE:", fname, "\n")
+    #   # cat("⚠️ Warning: Validation error in", chunk_path, "\n")
+    #   cat("   ➤", conditionMessage(e), "\n")
+    #   return(FALSE)
+    #   # continua senza interrompere
+    # })
+
+    # return(TRUE)
+    
+     
     # TRUE = no errors; FALSE = there is some error
     if (!hubValidations:::check_for_errors(res)) {
       cat("❌ INVALID FILE:", fname, "\n")
