@@ -173,6 +173,13 @@ def generate_baseline_forecast_fullpipeline(truth_data,
 
         # compute extra steps if truth data is missing
         extra_horizon = int((last_date - datetime.strptime(truth_data_loc.truth_date.max(), "%Y-%m-%d")).days / 7)
+
+        ## PATCH 20260218
+        # skip location if data gap is too large
+        if extra_horizon > 4:
+            print(f"Warning: skipping location {location} due to data gap of {extra_horizon} weeks (threshold: 4)")
+            continue
+        ####
         
         # generate baseline forecast samples
         samples = quantile_baseline(data=truth_data_loc.value.values, nsamples=nsamples, horizon=horizon + extra_horizon, symmetrize=symmetrize, include_training=False)
