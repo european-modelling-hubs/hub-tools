@@ -55,7 +55,7 @@ for (target in targets) {
   truth_data$target_end_date <- as.Date(truth_data$target_end_date, format = "%Y-%m-%d")
 
   # connect to hub
-  model_outputs <- hubData::connect_hub(hub_path = opt$hub_path) %>%
+  model_outputs <- hubData::connect_hub(hub_path = opt$hub_path, ignore_files = c("2026-02-11-Chronos-Chronos2.csv", "2026-02-18-Chronos-Chronos2.csv")) %>%
     dplyr::collect()
 
   # drop rows not relating to current target
