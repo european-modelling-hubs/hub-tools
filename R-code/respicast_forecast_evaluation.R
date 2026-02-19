@@ -58,9 +58,6 @@ for (target in targets) {
   model_outputs <- hubData::connect_hub(hub_path = opt$hub_path) %>%
     dplyr::collect()
 
-  # Temporary fix to be removed
-  model_outputs <- model_outputs[!model_outputs$model_id %in% c("Chronos-Chronos2"), ]
-
   # drop rows not relating to current target
   curr_target <- gsub("_", " ", target)
   model_outputs <- model_outputs[model_outputs$target %in% curr_target,]
