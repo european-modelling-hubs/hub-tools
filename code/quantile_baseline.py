@@ -201,7 +201,22 @@ def generate_baseline_forecast_fullpipeline(truth_data,
 # import forecasting weeks
 forecasting_weeks = import_forecasting_weeks(args.hub_path)
 
-target_data_combo = pd.DataFrame()
+# Initialize the output DataFrame with the expected schema so that, if no
+# eligible baseline rows are generated, the CSV still contains its header
+# and remains readable by downstream tools such as Arrow and hubData.
+# target_data_combo = pd.DataFrame()
+expected_columns = [
+    "origin_date",
+    "target",
+    "horizon",
+    "target_end_date",
+    "location",
+    "output_type",
+    "output_type_id",
+    "value",
+]
+target_data_combo = pd.DataFrame(columns=expected_columns)
+
 origin_date_combo = ''
 
 for target in targets:
