@@ -231,8 +231,13 @@ for target in targets:
     target_data_combo = pd.concat((target_data_combo, quantile_baseline_forecasts))
     origin_date_combo = origin_date
 
+# If no eligible baseline rows are generated, avoid writing the output DataFrame to CSV
+if target_data_combo.empty:
+    raise RuntimeError("Baseline generation failed: no eligible forecasts were generated.")
+    
 model_id = f"{str(args.team_abbr)}-{str(args.model_abbr)}"
 file_name = f"{origin_date_combo}-{model_id}.csv"
+    
 target_data_combo.to_csv(os.path.join(args.hub_path, f"model-output/{model_id}/{file_name}"), index=False)
 
 env_file = os.getenv('GITHUB_OUTPUT')
