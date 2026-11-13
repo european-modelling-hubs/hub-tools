@@ -3,7 +3,7 @@ import sys
 import csv
 from urllib.request import urlopen
 import urllib.error
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from isoweek import Week
 import argparse
 
@@ -14,7 +14,7 @@ import pycountry
 
 def get_snapshot_date() -> str:
     
-    today = datetime.now()
+    today = datetime.now(timezone.utc)
     days_to_last_friday = (today.weekday() - 4) % 7
     last_friday_date = today - timedelta(days=days_to_last_friday)
     return last_friday_date.date().isoformat()
@@ -26,13 +26,27 @@ def get_snapshot_date() -> str:
 parser = argparse.ArgumentParser()
 parser.add_argument('--hub_path')
 
+
+def snapshot_date_arg(value):
+    try:
+        parsed = datetime.strptime(value, "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("Expected snapshot date YYYY-MM-DD") from exc
+    if parsed.isoformat() != value or parsed.weekday() != 4:
+        raise argparse.ArgumentTypeError("Snapshot date must be a Friday in YYYY-MM-DD format")
+    return value
+
+
+parser.add_argument('--snapshot_date', type=snapshot_date_arg,
+                    help='ERVISS Friday snapshot; defaults to the last Friday (UTC)')
+
 args = parser.parse_args()
 
 hub_path            = str(args.hub_path)
 diseases_list       = ["ILI", "ARI"]
 target_records_list = [[('target', 'location', 'truth_date', 'year_week', 'value')] for _ in range(len(diseases_list))]
 countries_to_x1000  = ('Malta', 'Luxembourg', 'Cyprus') # Values for this countries must be multiplied by 1000
-snapshot_date       = get_snapshot_date()
+snapshot_date       = args.snapshot_date or get_snapshot_date()
 
 # Build URL
 url = 'https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/main/data/snapshots/{snapshot_date}_ILIARIRates.csv'
@@ -42,7 +56,7 @@ url = url.format(snapshot_date = snapshot_date)
 print (f'Reading from Http url {url}')
 
 try:
-    response = urlopen(url)
+    response = urlopen(url, timeout=60)
 
 except urllib.error.HTTPError:
     print (f'Http error - failed to access url {url}')
@@ -92,5 +106,6 @@ for disease_name in diseases_list:
 print (f'Imported list: {imported}')
 
 env_file = os.getenv('GITHUB_OUTPUT')
-with open(env_file, "a") as outenv:
-   outenv.write (f"imported_files={' '.join(imported)}")
+if env_file:
+    with open(env_file, "a") as outenv:
+        outenv.write(f"imported_files={' '.join(imported)}\n")
