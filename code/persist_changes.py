@@ -19,7 +19,7 @@ def storeMultiTargetData(target_data):
 
             print(f'Target {target_name} already in the list. Add data')
 
-            out_data[target_name]["changes"] = list(set(out_data[target_name]["changes"] + target))
+            out_data[target_name]["changes"] = list(set(out_data[target_name]["changes"] + [target]))
         
         else:        
             # if not in the list, just add changes                      
